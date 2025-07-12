@@ -1,0 +1,384 @@
+/*
+Brutalist dark theme for DCA BTC
+https://github.com/afa7789/dca_btc_brutalist
+Enhanced with D3 chart support and mobile-first design
+*/
+
+/* Base brutalist styles */
+body {
+    font-family: monospace;
+    margin: 20px;
+    background: black;
+    color: white;
+    word-wrap: break-word;
+    max-width: 1200px;
+    margin: 20px auto;
+    line-height: 1.4;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.theme-toggle {
+    font-family: monospace;
+    border: 2px solid white;
+    padding: 8px 12px;
+    background: black;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: none;
+}
+
+.theme-toggle:hover {
+    background: white;
+    color: black;
+}
+
+input, select, button {
+    font-family: monospace;
+    border: 2px solid white;
+    padding: 8px;
+    background: black;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+input[type="date"] {
+    color-scheme: dark;
+}
+
+button {
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: none;
+}
+
+button:hover {
+    background: white;
+    color: black;
+}
+
+/* Table styles */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    max-width: 1000px;
+    margin: 20px 0;
+}
+
+th, td {
+    border: 2px solid white;
+    padding: 8px;
+    text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font-weight: bold;
+}
+
+th {
+    background: white;
+    color: black;
+    text-transform: uppercase;
+}
+
+header a {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Chart container - FULL WIDTH */
+.brutalist-chart {
+    width: 100%; /* Take full width of its parent */
+    margin: 20px 0;
+    display: block;
+    overflow: visible; /* Important for axis labels that might extend slightly */
+    /* For desktop, you can explicitly set a max-width here if needed */
+    max-width: 900px; /* Example: Limit chart width on large screens */
+    margin-left: auto; /* Center the chart on desktop */
+    margin-right: auto;
+}
+
+/* SVG base styles - FULL WIDTH, NO BORDER */
+svg {
+    width: 100%; /* Fill the container's width */
+    height: auto; /* Maintain aspect ratio based on D3's internal calculations or set a min-height */
+    display: block;
+    background: black;
+    font-family: monospace;
+    overflow: visible;
+    max-height: 400px; /* For desktop and larger screens */
+}
+
+/* Chart-specific styles */
+.gold-line {
+    stroke: #FFD700;
+    stroke-width: 4px;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    fill: none;
+}
+
+.grid line {
+    stroke: #444;
+    stroke-width: 1px;
+    opacity: 0.5;
+}
+
+.grid path {
+    stroke: none;
+}
+
+/* SVG text styles */
+svg text {
+    font-size: 16px;
+    font-family: monospace;
+    fill: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Axis styles */
+svg .domain {
+    stroke: white;
+    stroke-width: 3px;
+}
+
+svg .tick line {
+    stroke: white;
+    stroke-width: 2px;
+}
+
+svg .tick text {
+    fill: white;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Results and transaction sections */
+#results {
+    display: none;
+    margin: 20px 0;
+    padding: 20px;
+    border: 3px solid white;
+    background: black;
+}
+
+#transactions {
+    display: none;
+    margin: 20px 0;
+    overflow-x: auto;
+}
+
+/* Mobile styles - MASSIVE FONTS, FULL WIDTH */
+@media (max-width: 600px) {
+    body {
+        margin: 5px;
+        font-size: 22px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .header h1 {
+        font-size: 40px;
+    }
+    .theme-toggle {
+        padding: 15px 20px;
+        font-size: 22px;
+    }
+    table {
+        font-size: 20px;
+    }
+    th, td {
+        padding: 12px 8px;
+        font-size: 18px;
+        word-break: break-all;
+        hyphens: auto;
+    }
+    /* Mobile table column widths */
+    th:nth-child(1), td:nth-child(1) { width: 20%; }
+    th:nth-child(2), td:nth-child(2) { width: 15%; }
+    th:nth-child(3), td:nth-child(3) { width: 20%; }
+    th:nth-child(4), td:nth-child(4) { width: 22%; }
+    th:nth-child(5), td:nth-child(5) { width: 23%; }
+    input, select, button {
+        font-size: 22px;
+        padding: 15px;
+    }
+    svg {
+        max-height: 400px; /* Mobile max height */
+    }
+    /* MASSIVE FONTS for mobile SVG */
+    svg text {
+        font-size: 32px !important;
+    }
+    svg .tick text {
+        font-size: 24px !important;
+    }
+    .gold-line {
+        stroke-width: 8px;
+    }
+    #results {
+        padding: 20px;
+        border: 3px solid white;
+        font-size: 20px;
+    }
+    #transactions {
+        overflow-x: auto;
+    }
+}
+
+/* Extra small mobile - GIGANTIC FONTS, FULL WIDTH */
+@media (max-width: 400px) {
+    body {
+        margin: 3px;
+        font-size: 24px;
+    }
+    .header h1 {
+        font-size: 48px;
+    }
+    .theme-toggle {
+        padding: 18px 25px;
+        font-size: 24px;
+    }
+    table {
+        font-size: 22px;
+    }
+    th, td {
+        padding: 15px 10px;
+        font-size: 20px;
+    }
+    input, select, button {
+        font-size: 24px;
+        padding: 18px;
+    }
+    svg {
+        max-height: 450px; /* Extra small mobile max height */
+    }
+    /* GIGANTIC FONTS for tiny screens */
+    svg text {
+        font-size: 36px !important;
+    }
+    svg .tick text {
+        font-size: 28px !important;
+    }
+    .gold-line {
+        stroke-width: 10px;
+    }
+    #results {
+        padding: 25px;
+        font-size: 22px;
+    }
+}
+
+/* Desktop styles */
+@media (min-width: 601px) {
+    body {
+        font-size: 16px;
+    }
+    
+    .header h1 {
+        font-size: 28px;
+    }
+    
+    table {
+        font-size: 14px;
+    }
+    
+    th, td {
+        padding: 10px;
+        font-size: 13px;
+    }
+    
+    svg {
+        max-height: 400px;
+        max-width: 900px;
+    }
+    
+    svg text {
+        font-size: 18px !important;
+    }
+    
+    svg .tick text {
+        font-size: 14px !important;
+    }
+    
+    .gold-line {
+        stroke-width: 3px;
+    }
+}
+
+/* Interaction effects */
+@media (hover: hover) {
+    button:hover,
+    .theme-toggle:hover {
+        transform: translate(2px, 2px);
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .grid line {
+        opacity: 0.8;
+    }
+    
+    .gold-line {
+        stroke-width: 5px;
+    }
+}
+
+/* Exemplo de estilos em styles.css para as linhas - ajuste conforme sua estética "brutalista" */
+.line {
+    fill: none;
+    stroke-width: 2px; /* Ajuste a espessura da linha se quiser */
+}
+
+/* Você pode adicionar estilos específicos para cada linha se quiser overrides */
+.normal-gold-line {
+    /* stroke: orange;  Isso é definido no JS agora, mas você pode usar para overrides */
+}
+
+.inflation-fixed-line {
+    /* stroke: blue; */
+}
+
+.inflation-1971-line {
+    /* stroke: green; */
+}
+
+/* Estilo para a legenda (opcional, pode ser mais minimalista) */
+.legend text {
+    font-family: monospace; /* Fonte consistente com o brutalismo */
+}
+
+#ath-display {
+    margin: 50px
+}
+
+#ath-display p {
+    margin: 5px 0;
+}
+
+#ath-display strong {
+    color: #c8c8c8;
+}

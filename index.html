@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DEBASE</title>
+    <link rel="icon" type="image/svg+xml" href="static/favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>
+</head>
+
+<body>
+    <header>
+        <a href="https://github.com/afa7789/debase">
+            <h1>DEBASE</h1>
+        </a>
+    </header>
+
+
+    <div id="combined-gold-chart" class="brutalist-chart"></div>
+    <div id="ath-display">
+        <p><strong>ATH Normal Gold:</strong> <span id="ath-normal-gold"></span></p>
+        <p><strong>ATH Gold Adjusted (Fixed):</strong> <span id="ath-inflation-fixed"></span></p>
+        <p><strong>ATH Gold Adjuest (1971):</strong> <span id="ath-inflation-1971"></span></p>
+    </div>
+    <br>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>
+
+    <script>
+
+        // Wait for idb to be available and define wrapper functions
+        window.addEventListener('DOMContentLoaded', function () {
+            console.log('idb library available:', typeof window.idb !== 'undefined');
+        });
+
+        // IndexedDB wrapper functions - must be defined before dataset_manager.js loads
+        window.idbGet = async function (key) {
+            try {
+                // Check if idb is available
+                if (typeof window.idb === 'undefined') {
+                    throw new Error('idb library not loaded');
+                }
+
+                const db = await window.idb.openDB('csvDataStore', 1, {
+                    upgrade(db) {
+                        db.createObjectStore('datasets');
+                    }
+                });
+                const result = await db.get('datasets', key);
+                if (result !== undefined) return result;
+            } catch (e) {
+                console.warn('IndexedDB unavailable, falling back to localStorage:', e);
+            }
+            // Fallback to localStorage
+            const stored = localStorage.getItem(key);
+            return stored ? JSON.parse(stored) : null;
+        };
+
+        window.idbSet = async function (key, value) {
+            try {
+                // Check if idb is available
+                if (typeof window.idb === 'undefined') {
+                    throw new Error('idb library not loaded');
+                }
+
+                const db = await window.idb.openDB('csvDataStore', 1, {
+                    upgrade(db) {
+                        db.createObjectStore('datasets');
+                    }
+                });
+                await db.put('datasets', value, key);
+                return;
+            } catch (e) {
+                console.warn('IndexedDB unavailable, falling back to localStorage:', e);
+            }
+            // Fallback to localStorage
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (err) {
+                console.error('Both IndexedDB and localStorage failed:', err);
+            }
+        };
+
+        console.log('IndexedDB wrapper functions loaded');
+    </script>
+
+    <script src="scripts/dataset_manager.js"></script>
+
+    <script src="scripts/import_from_kraken.js"></script>
+
+    <script src="scripts/import_from_cpi.js"></script>
+
+    <script>
+        // The dates returned by csvManager.getFirstDate(GOLD) and csvManager.getFirstDate(CPI_U)
+        // are strings in the format "YYYY-MM-DD,value1,value2,..."
+
+        // Draw a brutalist D3 line chart - CSS-driven, mobile-first, NO DOTS
+        // Modified to accept an array of data objects for multiple lines
+        function drawCombinedChart(dataSets, divId = "combined-gold-chart", title = "PREÇO DO OURO", labelLeft = "USD $") {
+            const chartDiv = document.getElementById(divId);
+
+            if (!chartDiv) {
+                console.log(`Chart container with id ${divId} not found.`);
+                return;
+            }
+
+            const containerWidth = chartDiv.clientWidth;
+            const containerHeight = chartDiv.clientHeight > 0 ? chartDiv.clientHeight : (window.innerWidth <= 600 ? 400 : 400);
+
+            const internalWidth = containerWidth;
+            const internalHeight = (window.innerWidth <= 400) ? 450 : (window.innerWidth <= 600 ? 400 : 400);
+
+            const margin = {
+                top: (window.innerWidth <= 400) ? 60 : (window.innerWidth <= 600 ? 50 : 40),
+                right: (window.innerWidth <= 400) ? 20 : (window.innerWidth <= 600 ? 25 : 30),
+                bottom: (window.innerWidth <= 400) ? 80 : (window.innerWidth <= 600 ? 70 : 60),
+                left: (window.innerWidth <= 400) ? 55 : (window.innerWidth <= 600 ? 50 : 60)
+            };
+
+            // Clear previous chart
+            d3.select(`#${divId}`).selectAll("*").remove();
+
+            // Prepare data for all lines and determine combined domains
+            let allDates = [];
+            let allPrices = [];
+
+            dataSets.forEach(dataSet => {
+                dataSet.parsedData = dataSet.data.timestamp.map((d, i) => ({
+                    date: new Date(d),
+                    price: dataSet.data.price[i]
+                }));
+                allDates = allDates.concat(dataSet.parsedData.map(d => d.date));
+                allPrices = allPrices.concat(dataSet.parsedData.map(d => d.price));
+            });
+
+            // Create SVG
+            const svg = d3.select(`#${divId}`)
+                .append("svg")
+                .attr("width", internalWidth)
+                .attr("height", internalHeight);
+
+            // Scales
+            const x = d3.scaleTime()
+                .domain(d3.extent(allDates))
+                .range([margin.left, internalWidth - margin.right]);
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(allPrices) * 1.05]).nice()
+                .range([internalHeight - margin.bottom, margin.top]);
+
+            // Grid lines
+            const numXTicks = (window.innerWidth <= 400) ? 3 : (window.innerWidth <= 600 ? 4 : 6);
+            const numYTicks = (window.innerWidth <= 400) ? 4 : (window.innerWidth <= 600 ? 5 : 6);
+
+            // X-axis grid
+            svg.append("g")
+                .attr("class", "grid")
+                .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
+                .call(d3.axisBottom(x)
+                    .ticks(numXTicks)
+                    .tickSize(-(internalHeight - margin.top - margin.bottom))
+                    .tickFormat("")
+                );
+
+            // Y-axis grid
+            svg.append("g")
+                .attr("class", "grid")
+                .attr("transform", `translate(${margin.left},0)`)
+                .call(d3.axisLeft(y)
+                    .ticks(numYTicks)
+                    .tickSize(-(internalWidth - margin.left - margin.right))
+                    .tickFormat("")
+                );
+
+            // X-axis
+            const xAxis = svg.append("g")
+                .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
+                .call(d3.axisBottom(x).ticks(numXTicks));
+
+            if (window.innerWidth <= 600) {
+                xAxis.selectAll("text")
+                    .attr("transform", "rotate(-45)")
+                    .style("text-anchor", "end");
+            }
+
+            // Y-axis
+            svg.append("g")
+                .attr("transform", `translate(${margin.left},0)`)
+                .call(d3.axisLeft(y).ticks(numYTicks));
+
+            // Y-axis label
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", (window.innerWidth <= 400) ? 10 : (window.innerWidth <= 600 ? 10 : 20))
+                .attr("x", 0 - (internalHeight / 2))
+                .attr("dy", "-1em")
+                .style("text-anchor", "middle")
+                .text(labelLeft);
+
+            // Line generator
+            const line = d3.line()
+                .x(d => x(d.date))
+                .y(d => y(d.price))
+                .curve(d3.curveLinear);
+
+            // Draw each line
+            dataSets.forEach(dataSet => {
+                svg.append("path")
+                    .datum(dataSet.parsedData)
+                    .attr("class", `line ${dataSet.cssClass}`) // Add a specific class for styling
+                    .attr("fill", "none")
+                    .attr("stroke", dataSet.color) // Use the assigned color
+                    .attr("d", line);
+            });
+
+            // Title
+            svg.append("text")
+                .attr("x", internalWidth / 2)
+                .attr("y", (window.innerWidth <= 400) ? 30 : (window.innerWidth <= 600 ? 25 : 20))
+                .attr("text-anchor", "middle")
+                .text(title.toUpperCase());
+
+            // Add Legend
+            const legend = svg.append("g")
+                .attr("class", "legend")
+                .attr("transform", `translate(${margin.left}, ${internalHeight - margin.bottom + 40})`); // Position legend below the chart
+
+            dataSets.forEach((d, i) => {
+                const legendRow = legend.append("g")
+                    .attr("transform", `translate(0, ${i * 20})`); // Spacing between legend items
+
+                legendRow.append("rect")
+                    .attr("width", 10)
+                    .attr("height", 10)
+                    .attr("fill", d.color);
+
+                legendRow.append("text")
+                    .attr("x", 20)
+                    .attr("y", 10)
+                    .attr("text-anchor", "start")
+                    .style("font-size", "0.8em")
+                    .text(d.label);
+            });
+
+
+            // Resize handler - now redrawing combined chart
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    const currentDataSets = [
+                        { data: normalGold, label: "Preço Normal do Ouro", color: "orange", cssClass: "normal-gold-line" },
+                        { data: inflationFixedGold, label: "Ouro Ajustado Inflação (Fixo)", color: "blue", cssClass: "inflation-fixed-line" },
+                        { data: inflationGold1971, label: "Ouro Ajustado Inflação (1971)", color: "green", cssClass: "inflation-1971-line" }
+                    ];
+                    drawCombinedChart(currentDataSets, divId, title, labelLeft);
+                }, 200);
+            });
+        }
+
+        // Function to calculate the difference in days between two dates in "YYYY-MM-DD" format
+        function daysBetween(dateStr1, dateStr2) {
+            const d1 = new Date(dateStr1);
+            const d2 = new Date(dateStr2);
+            // Difference in milliseconds
+            const diffMs = d1 - d2;
+            // Convert to days
+            return Math.round(diffMs / (1000 * 60 * 60 * 24));
+        }
+
+        // Main application logic
+        async function main() {
+            console.log("Accessing global csvManager object:", csvManager);
+
+            const GOLD = "GOLD";
+            const CPI_U = "CPI_U";
+            const XMR = "XMR";
+            const ETH = "ETH";
+            const BTC = "BTC";
+
+            const datasetConfigs = [
+                { name: CPI_U, csvPath: '/datasets/daily_cpi_inflation.csv', fetchFunction: fetchCpiUData },
+                { name: GOLD, csvPath: '/datasets/gold.csv', fetchFunction: fetchGoldData },
+                { name: XMR, csvPath: '/datasets/monero_2014-05-21_2025-07-10.csv', fetchFunction: fetchXmrData },
+                { name: ETH, csvPath: '/datasets/ethereum_2015-08-07_2025-07-10.csv', fetchFunction: fetchEthData },
+                { name: BTC, csvPath: '/datasets/bitcoin_2010-07-17_2025-07-10.csv', fetchFunction: fetchBtcData },
+            ];
+
+            // Initialize all datasets
+            await csvManager.initAllDatasets(datasetConfigs);
+
+            const infoGOLD = csvManager.getDatasetInfo(GOLD);
+
+            // getCPIU data
+            let rangeData = csvManager.getDataRange(
+                CPI_U,
+                csvManager.getFirstDate(CPI_U),
+                csvManager.getLastDate(CPI_U)
+            );
+
+            // get number of days we have to skip in CPI_U
+            const daysAfterStart = daysBetween(
+                infoGOLD.firstDate,
+                csvManager.getFirstDate(CPI_U)
+            );
+
+            console.log('Days after start:', daysAfterStart);
+
+            // To slice from index 10959 to the end, omit the second argument:
+            let sliceRangeCPI_U = rangeData.slice(daysAfterStart);
+
+            sliceRangeCPI_U[0].daily_multiplicator = 1;
+
+            // calculate inflation multiplier starting in 1971 up to GOLD start date
+            let multiplierForGold1971 = 1;
+            for (let i = 0; i < daysAfterStart; i++) {
+                if (rangeData[i]) { // Boundary check for rangeData
+                    multiplierForGold1971 *= rangeData[i].daily_multiplicator;
+                } else {
+                    break;
+                }
+            }
+            // inflation from start of gold data.
+            let multiplierForGoldStart = 1;
+
+            console.log('CPI_U Slice Range:', sliceRangeCPI_U.length);
+
+            const inflationFixedGold = {
+                ATH: 0,
+                timestamp: [],
+                price: [],
+            };
+            const inflationGold1971 = {
+                ATH: 0,
+                timestamp: [],
+                price: [],
+            };
+            const normalGold = {
+                ATH: 0,
+                timestamp: [],
+                price: [],
+            };
+
+            let counter = 0;
+
+            csvManager.iterateRange(GOLD,
+                infoGOLD.firstDate,
+                infoGOLD.lastDate,
+                (date, data) => {
+                    let currentDailyMultiplicator = 1;
+                    if (counter < sliceRangeCPI_U.length && sliceRangeCPI_U[counter]) {
+                        currentDailyMultiplicator = sliceRangeCPI_U[counter].daily_multiplicator;
+                    } else if (sliceRangeCPI_U.length > 0) {
+                        currentDailyMultiplicator = sliceRangeCPI_U[sliceRangeCPI_U.length - 1].daily_multiplicator;
+                    }
+
+                    multiplierForGold1971 *= currentDailyMultiplicator;
+                    multiplierForGoldStart *= currentDailyMultiplicator;
+
+                    // Calculate inflation adjusted price for 1971 base
+                    const inflationAdjustedPrice1971 = data.Close / multiplierForGold1971;
+                    const highIAP1971 = data.High / multiplierForGold1971;
+                    if (highIAP1971 > inflationGold1971.ATH) {
+                        inflationGold1971.ATH = highIAP1971;
+                    }
+                    inflationGold1971.timestamp.push(date);
+                    inflationGold1971.price.push(inflationAdjustedPrice1971);
+
+                    // Calculate inflation adjusted price for gold start base
+                    const inflationAdjustedPriceFixed = data.Close / multiplierForGoldStart;
+                    const highIAPFixed = data.High / multiplierForGoldStart;
+                    if (highIAPFixed > inflationFixedGold.ATH) {
+                        inflationFixedGold.ATH = highIAPFixed;
+                    }
+                    inflationFixedGold.timestamp.push(date);
+                    inflationFixedGold.price.push(inflationAdjustedPriceFixed);
+
+                    // Normal Gold Price
+                    const price = data.Close;
+                    if (data.High > normalGold.ATH) {
+                        normalGold.ATH = data.High;
+                    }
+                    normalGold.timestamp.push(date);
+                    normalGold.price.push(price);
+
+                    counter++;
+                }
+            );
+
+            // Display ATH values
+            document.getElementById('ath-normal-gold').textContent = `$${normalGold.ATH.toFixed(2)}`;
+            document.getElementById('ath-inflation-fixed').textContent = `$${inflationFixedGold.ATH.toFixed(2)}`;
+            document.getElementById('ath-inflation-1971').textContent = `$${inflationGold1971.ATH.toFixed(2)}`;
+
+            // Data for the combined chart
+            const combinedChartData = [
+                { data: normalGold, label: "Normal Gold Price", color: "orange", cssClass: "normal-gold-line" },
+                { data: inflationFixedGold, label: "Inflation-Adjusted Gold (Fixed)", color: "blue", cssClass: "inflation-fixed-line" },
+                { data: inflationGold1971, label: "Inflation-Adjusted Gold (1971)", color: "green", cssClass: "inflation-1971-line" }
+            ];
+
+            // Draw the combined chart
+            drawCombinedChart(combinedChartData, "combined-gold-chart", "Gold Price (Comparison)", "USD $");
+
+        }
+
+        // Run main when page loads
+        main().catch(console.error);
+    </script>
+</body>
+
+</html>
