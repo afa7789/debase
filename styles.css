@@ -371,14 +371,16 @@ svg .tick text {
     font-family: monospace; /* Fonte consistente com o brutalismo */
 }
 
-#ath-display {
-    margin: 50px
+.ath-display {
+    padding: 0 20px;
+    margin-top: 60px;
+    margin-left: 80px;
 }
 
-#ath-display p {
+.ath-display p {
     margin: 5px 0;
 }
 
-#ath-display strong {
+.ath-display strong {
     color: #c8c8c8;
 }
