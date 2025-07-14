@@ -1,3 +1,12 @@
+    <!-- Dollar Purchasing Power Chart -->
+    <section style="margin-bottom: 1em;">
+        <p><strong>Dollar Purchasing Power (CPI):</strong> This chart shows the decline in the purchasing power of the US dollar over time, as measured by the Consumer Price Index (CPI). The line represents <code>1 / (accumulated inflation multiplier)</code> since 1971. As inflation accumulates, the value of the dollar falls, so the line trends downward. A value of 0.5 means the dollar buys half as much as it did at the start.</p>
+    </section>
+    <div id="usd-purchasing-power-chart" class="brutalist-chart"></div>
+    <div class="ath-display">
+        <p><strong>Purchasing power is always relative to the starting date (1971).</strong></p>
+    </div>
+    <br>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -499,11 +508,118 @@
 
             // Get CPI_U data once, as it's the base for all inflation calculations
             const fullCpiUData = csvManager.getDataRange(
-            CPI_U,
-            csvManager.getFirstDate(CPI_U),
-            csvManager.getLastDate(CPI_U)
+                CPI_U,
+                csvManager.getFirstDate(CPI_U),
+                csvManager.getLastDate(CPI_U)
             );
             const cpiUFirstDate = csvManager.getFirstDate(CPI_U);
+
+            // --- Dollar Purchasing Power Chart Data ---
+            let accumulated = 1;
+            const purchasingPower = {
+                timestamp: [],
+                value: []
+            };
+            for (let i = 0; i < fullCpiUData.length; i++) {
+                const row = fullCpiUData[i];
+                if (!row.daily_multiplicator || isNaN(row.daily_multiplicator)) continue;
+                accumulated *= row.daily_multiplicator;
+                purchasingPower.timestamp.push(row.date);
+                purchasingPower.value.push(1 / accumulated);
+            }
+
+            // Draw Dollar Purchasing Power Chart
+            (function drawDollarPurchasingPowerChart() {
+                const data = purchasingPower.timestamp.map((d, i) => ({
+                    date: new Date(d),
+                    value: purchasingPower.value[i]
+                }));
+                const chartDiv = document.getElementById("usd-purchasing-power-chart");
+                if (!chartDiv) return;
+                const containerWidth = chartDiv.clientWidth;
+                const containerHeight = chartDiv.clientHeight > 0 ? chartDiv.clientHeight : (window.innerWidth <= 600 ? 400 : 400);
+                const internalWidth = containerWidth;
+                const internalHeight = (window.innerWidth <= 400) ? 450 : (window.innerWidth <= 600 ? 400 : 400);
+                const margin = {
+                    top: (window.innerWidth <= 400) ? 60 : (window.innerWidth <= 600 ? 50 : 40),
+                    right: (window.innerWidth <= 400) ? 20 : (window.innerWidth <= 600 ? 25 : 30),
+                    bottom: (window.innerWidth <= 400) ? 80 : (window.innerWidth <= 600 ? 70 : 60),
+                    left: (window.innerWidth <= 400) ? 70 : (window.innerWidth <= 600 ? 65 : 80)
+                };
+                d3.select("#usd-purchasing-power-chart").selectAll("*").remove();
+                const svg = d3.select("#usd-purchasing-power-chart")
+                    .append("svg")
+                    .attr("width", internalWidth)
+                    .attr("height", internalHeight);
+                const x = d3.scaleTime()
+                    .domain(d3.extent(data, d => d.date))
+                    .range([margin.left, internalWidth - margin.right]);
+                const y = d3.scaleLog()
+                    .domain([Math.max(d3.min(data, d => d.value) * 0.8, 0.01), 1.05])
+                    .range([internalHeight - margin.bottom, margin.top])
+                    .clamp(true);
+                // X grid
+                svg.append("g")
+                    .attr("class", "grid")
+                    .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
+                    .call(d3.axisBottom(x)
+                        .ticks(6)
+                        .tickSize(-(internalHeight - margin.top - margin.bottom))
+                        .tickFormat("")
+                    );
+                // Y grid
+                svg.append("g")
+                    .attr("class", "grid")
+                    .attr("transform", `translate(${margin.left},0)`)
+                    .call(d3.axisLeft(y)
+                        .ticks(6)
+                        .tickSize(-(internalWidth - margin.left - margin.right))
+                        .tickFormat("")
+                    );
+                // X axis
+                const xAxis = svg.append("g")
+                    .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
+                    .call(d3.axisBottom(x).ticks(6));
+                if (window.innerWidth <= 600) {
+                    xAxis.selectAll("text")
+                        .attr("transform", "rotate(-45)")
+                        .style("text-anchor", "end");
+                }
+                // Y axis
+                svg.append("g")
+                    .attr("transform", `translate(${margin.left},0)`)
+                    .call(d3.axisLeft(y)
+                        .ticks(6)
+                        .tickFormat(d => d.toFixed(2))
+                    );
+                // Y label
+                svg.append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", (window.innerWidth <= 400) ? 10 : (window.innerWidth <= 600 ? 10 : 15))
+                    .attr("x", 0 - (internalHeight / 2))
+                    .attr("dy", "-1em")
+                    .style("text-anchor", "middle")
+                    .text("Relative Purchasing Power");
+                // Line
+                const line = d3.line()
+                    .x(d => x(d.date))
+                    .y(d => y(d.value))
+                    .curve(d3.curveLinear);
+                svg.append("path")
+                    .datum(data)
+                    .attr("class", "line usd-purchasing-power-line")
+                    .attr("fill", "none")
+                    .attr("stroke", "#222")
+                    .attr("stroke-width", 2)
+                    .attr("d", line);
+                // Title
+                svg.append("text")
+                    .attr("x", internalWidth / 2)
+                    .attr("y", (window.innerWidth <= 400) ? 30 : (window.innerWidth <= 600 ? 25 : 20))
+                    .attr("text-anchor", "middle")
+                    .style("font-weight", "bold")
+                    .text("DOLLAR PURCHASING POWER (CPI)");
+            })();
 
             // Helper function to get asset-specific inflation data
             function getAssetInflationParams(assetInfo) {
