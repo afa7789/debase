@@ -18,7 +18,16 @@
         </a>
     </header>
 
+    <!-- Disclaimer and 1971 context -->
+    <section style="margin-bottom: 2em;">
+        <p style="font-weight:bold; color:#ffb300;">Disclaimer: This is a static demo web app for concept and testing purposes. Data and calculations may not be as accurate as they appear. Always verify with primary sources before making financial decisions.</p>
+        <p><strong>Why 1971?</strong> — In 1971, the US ended the convertibility of the dollar to gold (the "Nixon Shock"), marking the start of the modern fiat era. Comparing assets from this point helps visualize long-term inflation and monetary effects on asset prices. <a href="https://wtfhappenedin1971.com/" target="_blank" rel="noopener" style="color:#ffb300; text-decoration:underline;">Learn more</a></p>
+    </section>
+
     <!-- Gold Chart -->
+    <section style="margin-bottom: 1em;">
+        <p><strong>Gold Price Chart:</strong> Shows the price of gold in USD, both in nominal terms and adjusted for inflation. The "Fixed" line adjusts for inflation using the CPI from the start of the gold dataset, while the "1971" line adjusts from the year 1971. This helps visualize gold's real purchasing power over time.</p>
+    </section>
     <div id="gold-chart" class="brutalist-chart"></div>
     <div class="ath-display">
         <p><strong>Gold ATH Normal:</strong> <span id="gold-ath-normal"></span></p>
@@ -28,6 +37,9 @@
     <br>
 
     <!-- ETH Chart -->
+    <section style="margin-bottom: 1em;">
+        <p><strong>Ethereum Price Chart:</strong> Plots ETH price in USD, both nominal and inflation-adjusted. The "Fixed" line uses inflation adjustment from ETH's launch date, while the "1971" line uses the multiplier from 1971. This shows how ETH's value compares to the changing value of money.</p>
+    </section>
     <div id="eth-chart" class="brutalist-chart"></div>
     <div class="ath-display">
         <p><strong>ETH ATH Normal:</strong> <span id="eth-ath-normal"></span></p>
@@ -37,6 +49,9 @@
     <br>
 
     <!-- Bitcoin Chart -->
+    <section style="margin-bottom: 1em;">
+        <p><strong>Bitcoin Price Chart:</strong> Plots BTC price in USD, both nominal and inflation-adjusted. The "Fixed" line uses inflation adjustment from BTC's launch date, while the "1971" line uses the multiplier from 1971. This helps compare Bitcoin's real growth to the effects of inflation.</p>
+    </section>
     <div id="btc-chart" class="brutalist-chart"></div>
     <div class="ath-display">
         <p><strong>BTC ATH Normal:</strong> <span id="btc-ath-normal"></span></p>
@@ -46,6 +61,9 @@
     <br>
 
     <!-- XMR Chart -->
+    <section style="margin-bottom: 1em;">
+        <p><strong>Monero Price Chart:</strong> Plots XMR price in USD, both nominal and inflation-adjusted. The "Fixed" line uses inflation adjustment from XMR's launch date, while the "1971" line uses the multiplier from 1971. This helps compare Monero's real growth to the effects of inflation.</p>
+    </section>
     <div id="xmr-chart" class="brutalist-chart"></div>
     <div class="ath-display">
         <p><strong>XMR ATH Normal:</strong> <span id="xmr-ath-normal"></span></p>
@@ -55,11 +73,27 @@
     <br>
 
     <!-- Gold-Adjusted Crypto Chart -->
+    <section style="margin-bottom: 1em;">
+        <p><strong>Crypto Priced in Gold:</strong> These lines show the value of ETH, BTC, and XMR measured in ounces of gold, not dollars. This helps compare crypto performance to gold, a traditional store of value, and see which asset outperformed the other over time.</p>
+    </section>
     <div id="gold-adjusted-crypto-chart" class="brutalist-chart"></div>
     <div class="ath-display">
         <p><strong>ETH/Gold ATH:</strong> <span id="eth-gold-ath"></span></p>
         <p><strong>BTC/Gold ATH:</strong> <span id="btc-gold-ath"></span></p>
         <p><strong>XMR/Gold ATH:</strong> <span id="xmr-gold-ath"></span></p>
+    </div>
+    <br>
+
+
+    <!-- Relative Growth in USD  Chart -->
+    <section style="margin-bottom: 1em;">
+        <p><strong>Relative Growth (Comparison):</strong> This chart shows how much each crypto asset (BTC, ETH, XMR) has grown or shrunk relative to its own starting price in USD. Each line is normalized so its first price is 1.0, and every point after shows how many times the asset has multiplied (or divided) compared to its beginning.<br><br>
+        <em>How to compare:</em> If one line is above another, it means that asset has grown more (in percentage terms) since its own launch, regardless of the initial price. For example, if BTC is at 10x and ETH is at 5x, BTC has multiplied 10 times and ETH 5 times since their respective first days. This lets you compare the relative performance and growth trajectory of each asset, even if they started at different times or prices.<br><br>
+        <strong>Note:</strong> The Y-axis uses a logarithmic scale to make it easier to compare growth rates across assets that have multiplied by very different amounts.</p>
+    </section>
+    <div id="crypto-relative-growth-usd-chart" class="brutalist-chart"></div>
+    <div class="ath-display">
+        <p><strong>Each line starts at 1.0 (its own first USD price).</strong></p>
     </div>
     <br>
 
@@ -570,11 +604,307 @@
             document.getElementById('xmr-gold-ath').textContent = `${xmrGoldAdjusted.ATH.toFixed(6)} oz`;
 
             const goldAdjustedChartData = [
-            { data: ethGoldAdjusted, label: "ETH/Gold", color: "purple", cssClass: "eth-gold-line" },
-            { data: btcGoldAdjusted, label: "BTC/Gold", color: "orange", cssClass: "btc-gold-line" },
-            { data: xmrGoldAdjusted, label: "XMR/Gold", color: "red", cssClass: "xmr-gold-line" }
+                { data: ethGoldAdjusted, label: "ETH/Gold", color: "purple", cssClass: "eth-gold-line" },
+                { data: btcGoldAdjusted, label: "BTC/Gold", color: "orange", cssClass: "btc-gold-line" },
+                { data: xmrGoldAdjusted, label: "XMR/Gold", color: "red", cssClass: "xmr-gold-line" }
             ];
             drawCombinedChart(goldAdjustedChartData, "gold-adjusted-crypto-chart", "Crypto Assets Adjusted by Gold", "Ounces of Gold");
+
+
+
+            // --- Improved Relative Growth in USD (No Gold) Chart ---
+            function normalizeUsdSeriesFromOwnStart(series, assetName = "") {
+                console.log(`Processing ${assetName}:`, {
+                    dataLength: series.price.length,
+                    firstPrice: series.price[0],
+                    firstTimestamp: series.timestamp[0]
+                });
+                
+                if (!series.price.length) {
+                    console.warn(`No price data for ${assetName}`);
+                    return { ...series };
+                }
+                
+                // Find the first valid (non-zero, non-NaN) price
+                let firstValidPrice = null;
+                let firstValidIndex = -1;
+                
+                for (let i = 0; i < series.price.length; i++) {
+                    const price = series.price[i];
+                    if (price && !isNaN(price) && price > 0) {
+                        firstValidPrice = price;
+                        firstValidIndex = i;
+                        break;
+                    }
+                }
+                
+                if (firstValidPrice === null) {
+                    console.warn(`No valid first price for ${assetName}, all values are zero or invalid`);
+                    return {
+                        ...series,
+                        price: series.price.map(_ => NaN),
+                    };
+                }
+                
+                console.log(`${assetName} first valid price: ${firstValidPrice} at index ${firstValidIndex}`);
+                
+                // Start from the first valid price point
+                const normalizedTimestamps = series.timestamp.slice(firstValidIndex);
+                const normalizedPrices = series.price.slice(firstValidIndex).map(price => {
+                    if (!price || isNaN(price) || price <= 0) {
+                        return NaN; // Handle invalid data points
+                    }
+                    return price / firstValidPrice;
+                });
+                
+                console.log(`${assetName} normalized:`, {
+                    length: normalizedPrices.length,
+                    firstNormalized: normalizedPrices[0],
+                    lastNormalized: normalizedPrices[normalizedPrices.length - 1],
+                    maxValue: Math.max(...normalizedPrices.filter(p => !isNaN(p)))
+                });
+                
+                return {
+                    timestamp: normalizedTimestamps,
+                    price: normalizedPrices,
+                };
+            }
+
+            // Apply normalization with better error handling
+            const btcUsdRelative = normalizeUsdSeriesFromOwnStart(btcData.normal, "BTC");
+            const ethUsdRelative = normalizeUsdSeriesFromOwnStart(ethData.normal, "ETH");
+            const xmrUsdRelative = normalizeUsdSeriesFromOwnStart(xmrData.normal, "XMR");
+
+            // Enhanced chart data with better colors and styling
+            const cryptoRelativeGrowthUsdChartData = [
+                { 
+                    data: btcUsdRelative, 
+                    label: "BTC (USD Relative Growth)", 
+                    color: "#f7931a", // Bitcoin orange
+                    cssClass: "btc-usd-rel-line" 
+                },
+                { 
+                    data: ethUsdRelative, 
+                    label: "ETH (USD Relative Growth)", 
+                    color: "#627eea", // Ethereum blue
+                    cssClass: "eth-usd-rel-line" 
+                },
+                { 
+                    data: xmrUsdRelative, 
+                    label: "XMR (USD Relative Growth)", 
+                    color: "#ff6600", // Monero orange
+                    cssClass: "xmr-usd-rel-line" 
+                }
+            ];
+
+            // Modified drawCombinedChart function for better logarithmic scaling
+            function drawRelativeGrowthChart(dataSets, divId = "crypto-relative-growth-usd-chart") {
+                const chartDiv = document.getElementById(divId);
+                if (!chartDiv) {
+                    console.log(`Chart container with id ${divId} not found.`);
+                    return;
+                }
+
+                const containerWidth = chartDiv.clientWidth;
+                const containerHeight = chartDiv.clientHeight > 0 ? chartDiv.clientHeight : (window.innerWidth <= 600 ? 400 : 400);
+
+                const internalWidth = containerWidth;
+                const internalHeight = (window.innerWidth <= 400) ? 450 : (window.innerWidth <= 600 ? 400 : 400);
+
+                const margin = {
+                    top: (window.innerWidth <= 400) ? 60 : (window.innerWidth <= 600 ? 50 : 40),
+                    right: (window.innerWidth <= 400) ? 20 : (window.innerWidth <= 600 ? 25 : 30),
+                    bottom: (window.innerWidth <= 400) ? 80 : (window.innerWidth <= 600 ? 70 : 60),
+                    left: (window.innerWidth <= 400) ? 70 : (window.innerWidth <= 600 ? 65 : 80) // More space for larger numbers
+                };
+
+                // Clear previous chart
+                d3.select(`#${divId}`).selectAll("*").remove();
+
+                // Prepare data and find valid ranges
+                let allDates = [];
+                let allPrices = [];
+                let validDataSets = [];
+
+                dataSets.forEach(dataSet => {
+                    const validPrices = dataSet.data.price.filter(p => !isNaN(p) && p > 0);
+                    if (validPrices.length > 0) {
+                        dataSet.parsedData = dataSet.data.timestamp.map((d, i) => ({
+                            date: new Date(d),
+                            price: dataSet.data.price[i]
+                        })).filter(d => !isNaN(d.price) && d.price > 0);
+                        
+                        if (dataSet.parsedData.length > 0) {
+                            validDataSets.push(dataSet);
+                            allDates = allDates.concat(dataSet.parsedData.map(d => d.date));
+                            allPrices = allPrices.concat(dataSet.parsedData.map(d => d.price));
+                        }
+                    }
+                });
+
+                if (validDataSets.length === 0) {
+                    console.error("No valid data to display in relative growth chart");
+                    return;
+                }
+
+                // Create SVG
+                const svg = d3.select(`#${divId}`)
+                    .append("svg")
+                    .attr("width", internalWidth)
+                    .attr("height", internalHeight);
+
+                // Scales - Use log scale for Y-axis to better show relative growth
+                const x = d3.scaleTime()
+                    .domain(d3.extent(allDates))
+                    .range([margin.left, internalWidth - margin.right]);
+
+                const maxPrice = d3.max(allPrices);
+                const minPrice = d3.min(allPrices.filter(p => p > 0));
+                
+                // Use log scale if the range is very large, otherwise linear
+                const useLogScale = maxPrice / minPrice > 100;
+                
+                let y;
+                if (useLogScale) {
+                    y = d3.scaleLog()
+                        .domain([Math.max(minPrice * 0.8, 0.1), maxPrice * 1.2])
+                        .range([internalHeight - margin.bottom, margin.top])
+                        .clamp(true);
+                } else {
+                    y = d3.scaleLinear()
+                        .domain([0, maxPrice * 1.05])
+                        .range([internalHeight - margin.bottom, margin.top]);
+                }
+
+                // Grid lines
+                const numXTicks = (window.innerWidth <= 400) ? 3 : (window.innerWidth <= 600 ? 4 : 6);
+                const numYTicks = (window.innerWidth <= 400) ? 4 : (window.innerWidth <= 600 ? 5 : 6);
+
+                // X-axis grid
+                svg.append("g")
+                    .attr("class", "grid")
+                    .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
+                    .call(d3.axisBottom(x)
+                        .ticks(numXTicks)
+                        .tickSize(-(internalHeight - margin.top - margin.bottom))
+                        .tickFormat("")
+                    );
+
+                // Y-axis grid
+                svg.append("g")
+                    .attr("class", "grid")
+                    .attr("transform", `translate(${margin.left},0)`)
+                    .call(d3.axisLeft(y)
+                        .ticks(numYTicks)
+                        .tickSize(-(internalWidth - margin.left - margin.right))
+                        .tickFormat("")
+                    );
+
+                // X-axis
+                const xAxis = svg.append("g")
+                    .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
+                    .call(d3.axisBottom(x).ticks(numXTicks));
+
+                if (window.innerWidth <= 600) {
+                    xAxis.selectAll("text")
+                        .attr("transform", "rotate(-45)")
+                        .style("text-anchor", "end");
+                }
+
+                // Y-axis with better formatting
+                const yAxis = svg.append("g")
+                    .attr("transform", `translate(${margin.left},0)`)
+                    .call(d3.axisLeft(y)
+                        .ticks(numYTicks)
+                        .tickFormat(d => {
+                            if (d >= 1000000) return `${(d/1000000).toFixed(1)}M`;
+                            if (d >= 1000) return `${(d/1000).toFixed(1)}K`;
+                            if (d >= 1) return `${d.toFixed(0)}x`;
+                            return d.toFixed(2);
+                        })
+                    );
+
+                // Y-axis label
+                svg.append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", (window.innerWidth <= 400) ? 10 : (window.innerWidth <= 600 ? 10 : 15))
+                    .attr("x", 0 - (internalHeight / 2))
+                    .attr("dy", "-1em")
+                    .style("text-anchor", "middle")
+                    .text("Growth Multiplier");
+
+                // Line generator
+                const line = d3.line()
+                    .x(d => x(d.date))
+                    .y(d => y(d.price))
+                    .curve(d3.curveLinear)
+                    .defined(d => !isNaN(d.price) && d.price > 0); // Only draw valid points
+
+                // Draw each line
+                validDataSets.forEach(dataSet => {
+                    svg.append("path")
+                        .datum(dataSet.parsedData)
+                        .attr("class", `line ${dataSet.cssClass}`)
+                        .attr("fill", "none")
+                        .attr("stroke", dataSet.color)
+                        .attr("stroke-width", 2)
+                        .attr("d", line);
+                });
+
+                // Title
+                svg.append("text")
+                    .attr("x", internalWidth / 2)
+                    .attr("y", (window.innerWidth <= 400) ? 30 : (window.innerWidth <= 600 ? 25 : 20))
+                    .attr("text-anchor", "middle")
+                    .style("font-weight", "bold")
+                    .text("CRYPTO RELATIVE GROWTH IN USD");
+
+                // Add Legend
+                const legend = svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", `translate(${margin.left}, ${internalHeight - margin.bottom + 40})`);
+
+                validDataSets.forEach((d, i) => {
+                    const legendRow = legend.append("g")
+                        .attr("transform", `translate(0, ${i * 20})`);
+
+                    legendRow.append("rect")
+                        .attr("width", 10)
+                        .attr("height", 10)
+                        .attr("fill", d.color);
+
+                    legendRow.append("text")
+                        .attr("x", 20)
+                        .attr("y", 10)
+                        .attr("text-anchor", "start")
+                        .style("font-size", "0.8em")
+                        .text(d.label);
+                });
+
+                // Add reference line at 1x
+                svg.append("line")
+                    .attr("x1", margin.left)
+                    .attr("x2", internalWidth - margin.right)
+                    .attr("y1", y(1))
+                    .attr("y2", y(1))
+                    .attr("stroke", "#666")
+                    .attr("stroke-dasharray", "3,3")
+                    .attr("opacity", 0.5);
+
+                // Add 1x label
+                svg.append("text")
+                    .attr("x", margin.left + 5)
+                    .attr("y", y(1) - 5)
+                    .style("font-size", "0.7em")
+                    .style("fill", "#666")
+                    .text("1x");
+            }
+
+            // Use the improved chart function
+            drawRelativeGrowthChart(
+                cryptoRelativeGrowthUsdChartData,
+                "crypto-relative-growth-usd-chart"
+            );
 
         }
         // Run main when page loads
