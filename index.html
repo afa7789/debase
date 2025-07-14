@@ -20,13 +20,23 @@
 
     <!-- Disclaimer and 1971 context -->
     <section style="margin-bottom: 2em;">
-        <p style="font-weight:bold; color:#ffb300;">Disclaimer: This is a static demo web app for concept and testing purposes. Data and calculations may not be as accurate as they appear. Always verify with primary sources before making financial decisions.</p>
-        <p><strong>Why 1971?</strong> — In 1971, the US ended the convertibility of the dollar to gold (the "Nixon Shock"), marking the start of the modern fiat era. Comparing assets from this point helps visualize long-term inflation and monetary effects on asset prices. <a href="https://wtfhappenedin1971.com/" target="_blank" rel="noopener" style="color:#ffb300; text-decoration:underline;">Learn more</a></p>
+        <p style="font-weight:bold; color:#ffb300;">Disclaimer: This is a static demo web app for concept and testing
+            purposes. Data and calculations may not be as accurate as they appear. Always verify with primary sources
+            before making financial decisions.</p>
+        <p><strong>Why 1971?</strong> — In 1971, the US ended the convertibility of the dollar to gold (the "Nixon
+            Shock"), marking the start of the modern fiat era. Comparing assets from this point helps visualize
+            long-term inflation and monetary effects on asset prices. <a href="https://wtfhappenedin1971.com/"
+                target="_blank" rel="noopener" style="color:#ffb300; text-decoration:underline;">Learn more</a></p>
     </section>
 
     <!-- Dollar Purchasing Power Chart -->
     <section style="margin-bottom: 1em;">
-        <p><strong>Dollar Purchasing Power (CPI):</strong> This chart shows the decline in the purchasing power of the US dollar over time, as measured by the Consumer Price Index (CPI). The line represents <code>1 / (accumulated inflation multiplier)</code> since 1971. As inflation accumulates, the value of the dollar falls, so the line trends downward. A value of 0.5 means the dollar buys half as much as it did at the start.</p>
+        <p><strong>Dollar Purchasing Power (CPI):</strong> This chart shows the decline in the purchasing power of the
+            US dollar over time, as measured by the Consumer Price Index (CPI). The line represents
+            <code>1 / (accumulated inflation multiplier)</code> since 1971. As inflation accumulates, the value of the
+            dollar falls, so the line trends downward. A value of 0.5 means the dollar buys half as much as it did at
+            the start.
+        </p>
     </section>
     <div id="usd-purchasing-power-chart" class="brutalist-chart"></div>
     <div class="ath-display">
@@ -36,7 +46,9 @@
 
     <!-- Gold Chart -->
     <section style="margin-bottom: 1em;">
-        <p><strong>Gold Price Chart:</strong> Shows the price of gold in USD, both in nominal terms and adjusted for inflation. The "Fixed" line adjusts for inflation using the CPI from the start of the gold dataset, while the "1971" line adjusts from the year 1971. This helps visualize gold's real purchasing power over time.</p>
+        <p><strong>Gold Price Chart:</strong> Shows the price of gold in USD, both in nominal terms and adjusted for
+            inflation. The "Fixed" line adjusts for inflation using the CPI from the start of the gold dataset, while
+            the "1971" line adjusts from the year 1971. This helps visualize gold's real purchasing power over time.</p>
     </section>
     <div id="gold-chart" class="brutalist-chart"></div>
     <div class="ath-display">
@@ -48,7 +60,9 @@
 
     <!-- ETH Chart -->
     <section style="margin-bottom: 1em;">
-        <p><strong>Ethereum Price Chart:</strong> Plots ETH price in USD, both nominal and inflation-adjusted. The "Fixed" line uses inflation adjustment from ETH's launch date, while the "1971" line uses the multiplier from 1971. This shows how ETH's value compares to the changing value of money.</p>
+        <p><strong>Ethereum Price Chart:</strong> Plots ETH price in USD, both nominal and inflation-adjusted. The
+            "Fixed" line uses inflation adjustment from ETH's launch date, while the "1971" line uses the multiplier
+            from 1971. This shows how ETH's value compares to the changing value of money.</p>
     </section>
     <div id="eth-chart" class="brutalist-chart"></div>
     <div class="ath-display">
@@ -60,7 +74,9 @@
 
     <!-- Bitcoin Chart -->
     <section style="margin-bottom: 1em;">
-        <p><strong>Bitcoin Price Chart:</strong> Plots BTC price in USD, both nominal and inflation-adjusted. The "Fixed" line uses inflation adjustment from BTC's launch date, while the "1971" line uses the multiplier from 1971. This helps compare Bitcoin's real growth to the effects of inflation.</p>
+        <p><strong>Bitcoin Price Chart:</strong> Plots BTC price in USD, both nominal and inflation-adjusted. The
+            "Fixed" line uses inflation adjustment from BTC's launch date, while the "1971" line uses the multiplier
+            from 1971. This helps compare Bitcoin's real growth to the effects of inflation.</p>
     </section>
     <div id="btc-chart" class="brutalist-chart"></div>
     <div class="ath-display">
@@ -72,7 +88,9 @@
 
     <!-- XMR Chart -->
     <section style="margin-bottom: 1em;">
-        <p><strong>Monero Price Chart:</strong> Plots XMR price in USD, both nominal and inflation-adjusted. The "Fixed" line uses inflation adjustment from XMR's launch date, while the "1971" line uses the multiplier from 1971. This helps compare Monero's real growth to the effects of inflation.</p>
+        <p><strong>Monero Price Chart:</strong> Plots XMR price in USD, both nominal and inflation-adjusted. The "Fixed"
+            line uses inflation adjustment from XMR's launch date, while the "1971" line uses the multiplier from 1971.
+            This helps compare Monero's real growth to the effects of inflation.</p>
     </section>
     <div id="xmr-chart" class="brutalist-chart"></div>
     <div class="ath-display">
@@ -84,7 +102,9 @@
 
     <!-- Gold-Adjusted Crypto Chart -->
     <section style="margin-bottom: 1em;">
-        <p><strong>Crypto Priced in Gold:</strong> These lines show the value of ETH, BTC, and XMR measured in ounces of gold, not dollars. This helps compare crypto performance to gold, a traditional store of value, and see which asset outperformed the other over time.</p>
+        <p><strong>Crypto Priced in Gold:</strong> These lines show the value of ETH, BTC, and XMR measured in ounces of
+            gold, not dollars. This helps compare crypto performance to gold, a traditional store of value, and see
+            which asset outperformed the other over time.</p>
     </section>
     <div id="gold-adjusted-crypto-chart" class="brutalist-chart"></div>
     <div class="ath-display">
@@ -95,11 +115,18 @@
     <br>
 
 
-    <!-- Relative Growth in USD  Chart -->
+
+    <!-- Relative Price Ratio in USD Chart -->
     <section style="margin-bottom: 1em;">
-        <p><strong>Relative Growth (Comparison):</strong> This chart shows how much each crypto asset (BTC, ETH, XMR) has grown or shrunk relative to its own starting price in USD. Each line is normalized so its first price is 1.0, and every point after shows how many times the asset has multiplied (or divided) compared to its beginning.<br><br>
-        <em>How to compare:</em> If one line is above another, it means that asset has grown more (in percentage terms) since its own launch, regardless of the initial price. For example, if BTC is at 10x and ETH is at 5x, BTC has multiplied 10 times and ETH 5 times since their respective first days. This lets you compare the relative performance and growth trajectory of each asset, even if they started at different times or prices.<br><br>
-        <strong>Note:</strong> The Y-axis uses a logarithmic scale to make it easier to compare growth rates across assets that have multiplied by very different amounts.</p>
+        <p><strong>Relative Price Ratio (Comparison):</strong> This chart shows how each crypto asset (BTC, ETH, XMR)
+            has changed relative to its own starting price in USD. Each line is normalized so its first price is
+            1.0, and every point after shows the ratio of the current price to the initial price.<br><br>
+            <em>How to compare:</em> If one line is above another, it means that asset has performed better (in percentage
+            terms) since its own launch, regardless of the initial price. For example, if BTC is at 10 and ETH is at
+            5, BTC is 10x its initial price and ETH is 5x. This lets you compare the relative performance and trajectory of each asset, even if they started at different times or prices.<br><br>
+            <strong>Note:</strong> The Y-axis uses a logarithmic scale to make it easier to compare ratios across
+            assets that have changed by very different amounts.
+        </p>
     </section>
     <div id="crypto-relative-growth-usd-chart" class="brutalist-chart"></div>
     <div class="ath-display">
@@ -110,8 +137,8 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>
 
-    <script>
 
+    <script>
         // Wait for idb to be available and define wrapper functions
         window.addEventListener('DOMContentLoaded', function () {
             console.log('idb library available:', typeof window.idb !== 'undefined');
@@ -190,6 +217,8 @@
         console.log('IndexedDB wrapper functions loaded');
     </script>
 
+    <script src="scripts/chart_draw.js"></script>
+
     <script src="scripts/dataset_manager.js"></script>
 
     <script src="scripts/import_from_kraken.js"></script>
@@ -199,155 +228,6 @@
     <script>
         // The dates returned by csvManager.getFirstDate(GOLD) and csvManager.getFirstDate(CPI_U)
         // are strings in the format "YYYY-MM-DD,value1,value2,..."
-
-        // Draw a brutalist D3 line chart - CSS-driven, mobile-first, NO DOTS
-        // Modified to accept an array of data objects for multiple lines
-        function drawCombinedChart(dataSets, divId = "combined-gold-chart", title = "PREÇO DO OURO", labelLeft = "USD $") {
-            const chartDiv = document.getElementById(divId);
-
-            if (!chartDiv) {
-                console.log(`Chart container with id ${divId} not found.`);
-                return;
-            }
-
-            const containerWidth = chartDiv.clientWidth;
-            const containerHeight = chartDiv.clientHeight > 0 ? chartDiv.clientHeight : (window.innerWidth <= 600 ? 400 : 400);
-
-            const internalWidth = containerWidth;
-            const internalHeight = (window.innerWidth <= 400) ? 450 : (window.innerWidth <= 600 ? 400 : 400);
-
-            const margin = {
-                top: (window.innerWidth <= 400) ? 60 : (window.innerWidth <= 600 ? 50 : 40),
-                right: (window.innerWidth <= 400) ? 20 : (window.innerWidth <= 600 ? 25 : 30),
-                bottom: (window.innerWidth <= 400) ? 80 : (window.innerWidth <= 600 ? 70 : 60),
-                left: (window.innerWidth <= 400) ? 55 : (window.innerWidth <= 600 ? 50 : 60)
-            };
-
-            // Clear previous chart
-            d3.select(`#${divId}`).selectAll("*").remove();
-
-            // Prepare data for all lines and determine combined domains
-            let allDates = [];
-            let allPrices = [];
-
-            dataSets.forEach(dataSet => {
-                dataSet.parsedData = dataSet.data.timestamp.map((d, i) => ({
-                    date: new Date(d),
-                    price: dataSet.data.price[i]
-                }));
-                allDates = allDates.concat(dataSet.parsedData.map(d => d.date));
-                allPrices = allPrices.concat(dataSet.parsedData.map(d => d.price));
-            });
-
-            // Create SVG
-            const svg = d3.select(`#${divId}`)
-                .append("svg")
-                .attr("width", internalWidth)
-                .attr("height", internalHeight);
-
-            // Scales
-            const x = d3.scaleTime()
-                .domain(d3.extent(allDates))
-                .range([margin.left, internalWidth - margin.right]);
-
-            const y = d3.scaleLinear()
-                .domain([0, d3.max(allPrices) * 1.05]).nice()
-                .range([internalHeight - margin.bottom, margin.top]);
-
-            // Grid lines
-            const numXTicks = (window.innerWidth <= 400) ? 3 : (window.innerWidth <= 600 ? 4 : 6);
-            const numYTicks = (window.innerWidth <= 400) ? 4 : (window.innerWidth <= 600 ? 5 : 6);
-
-            // X-axis grid
-            svg.append("g")
-                .attr("class", "grid")
-                .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
-                .call(d3.axisBottom(x)
-                    .ticks(numXTicks)
-                    .tickSize(-(internalHeight - margin.top - margin.bottom))
-                    .tickFormat("")
-                );
-
-            // Y-axis grid
-            svg.append("g")
-                .attr("class", "grid")
-                .attr("transform", `translate(${margin.left},0)`)
-                .call(d3.axisLeft(y)
-                    .ticks(numYTicks)
-                    .tickSize(-(internalWidth - margin.left - margin.right))
-                    .tickFormat("")
-                );
-
-            // X-axis
-            const xAxis = svg.append("g")
-                .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
-                .call(d3.axisBottom(x).ticks(numXTicks));
-
-            if (window.innerWidth <= 600) {
-                xAxis.selectAll("text")
-                    .attr("transform", "rotate(-45)")
-                    .style("text-anchor", "end");
-            }
-
-            // Y-axis
-            svg.append("g")
-                .attr("transform", `translate(${margin.left},0)`)
-                .call(d3.axisLeft(y).ticks(numYTicks));
-
-            // Y-axis label
-            svg.append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", (window.innerWidth <= 400) ? 10 : (window.innerWidth <= 600 ? 10 : 20))
-                .attr("x", 0 - (internalHeight / 2))
-                .attr("dy", "-1em")
-                .style("text-anchor", "middle")
-                .text(labelLeft);
-
-            // Line generator
-            const line = d3.line()
-                .x(d => x(d.date))
-                .y(d => y(d.price))
-                .curve(d3.curveLinear);
-
-            // Draw each line
-            dataSets.forEach(dataSet => {
-                svg.append("path")
-                    .datum(dataSet.parsedData)
-                    .attr("class", `line ${dataSet.cssClass}`) // Add a specific class for styling
-                    .attr("fill", "none")
-                    .attr("stroke", dataSet.color) // Use the assigned color
-                    .attr("d", line);
-            });
-
-            // Title
-            svg.append("text")
-                .attr("x", internalWidth / 2)
-                .attr("y", (window.innerWidth <= 400) ? 30 : (window.innerWidth <= 600 ? 25 : 20))
-                .attr("text-anchor", "middle")
-                .text(title.toUpperCase());
-
-            // Add Legend
-            const legend = svg.append("g")
-                .attr("class", "legend")
-                .attr("transform", `translate(${margin.left}, ${internalHeight - margin.bottom + 40})`); // Position legend below the chart
-
-            dataSets.forEach((d, i) => {
-                const legendRow = legend.append("g")
-                    .attr("transform", `translate(0, ${i * 20})`); // Spacing between legend items
-
-                legendRow.append("rect")
-                    .attr("width", 10)
-                    .attr("height", 10)
-                    .attr("fill", d.color);
-
-                legendRow.append("text")
-                    .attr("x", 20)
-                    .attr("y", 10)
-                    .attr("text-anchor", "start")
-                    .style("font-size", "0.8em")
-                    .text(d.label);
-            });
-        }
 
         // Function to calculate the difference in days between two dates in "YYYY-MM-DD" format
         function daysBetween(dateStr1, dateStr2) {
@@ -486,144 +366,66 @@
             };
         }
 
-        // Main application logic
-        async function main() {
-            console.log("Accessing global csvManager object:", csvManager);
+        // Function to normalize USD series from own start
+        function normalizeUsdSeriesFromOwnStart(series, assetName = "") {
+            console.log(`Processing ${assetName}:`, {
+                dataLength: series.price.length,
+                firstPrice: series.price[0],
+                firstTimestamp: series.timestamp[0]
+            });
 
-            const GOLD = "GOLD";
-            const CPI_U = "CPI_U";
-            const XMR = "XMR";
-            const ETH = "ETH";
-            const BTC = "BTC";
-
-            const datasetConfigs = [
-            { name: CPI_U, csvPath: 'datasets/daily_cpi_inflation.csv', fetchFunction: fetchCpiUData },
-            { name: GOLD, csvPath: 'datasets/gold.csv', fetchFunction: fetchGoldData },
-            { name: XMR, csvPath: 'datasets/monero_2014-05-21_2025-07-10.csv', fetchFunction: fetchXmrData },
-            { name: ETH, csvPath: 'datasets/ethereum_2015-08-07_2025-07-10.csv', fetchFunction: fetchEthData },
-            { name: BTC, csvPath: 'datasets/bitcoin_2010-07-17_2025-07-10.csv', fetchFunction: fetchBtcData },
-            ];
-
-            // Initialize all datasets
-            await csvManager.initAllDatasets(datasetConfigs);
-
-            // Get CPI_U data once, as it's the base for all inflation calculations
-            const fullCpiUData = csvManager.getDataRange(
-                CPI_U,
-                csvManager.getFirstDate(CPI_U),
-                csvManager.getLastDate(CPI_U)
-            );
-            const cpiUFirstDate = csvManager.getFirstDate(CPI_U);
-
-            // --- Dollar Purchasing Power Chart Data ---
-            let accumulated = 1;
-            const purchasingPower = {
-                timestamp: [],
-                value: []
-            };
-            for (let i = 0; i < fullCpiUData.length; i++) {
-                const row = fullCpiUData[i];
-                if (!row.daily_multiplicator || isNaN(row.daily_multiplicator)) continue;
-                accumulated *= row.daily_multiplicator;
-                purchasingPower.timestamp.push(row.date);
-                purchasingPower.value.push(1 / accumulated);
+            if (!series.price.length) {
+                console.warn(`No price data for ${assetName}`);
+                return { ...series };
             }
 
-            // Draw Dollar Purchasing Power Chart
-            (function drawDollarPurchasingPowerChart() {
-                const data = purchasingPower.timestamp.map((d, i) => ({
-                    date: new Date(d),
-                    value: purchasingPower.value[i]
-                }));
-                const chartDiv = document.getElementById("usd-purchasing-power-chart");
-                if (!chartDiv) return;
-                const containerWidth = chartDiv.clientWidth;
-                const containerHeight = chartDiv.clientHeight > 0 ? chartDiv.clientHeight : (window.innerWidth <= 600 ? 400 : 400);
-                const internalWidth = containerWidth;
-                const internalHeight = (window.innerWidth <= 400) ? 450 : (window.innerWidth <= 600 ? 400 : 400);
-                const margin = {
-                    top: (window.innerWidth <= 400) ? 60 : (window.innerWidth <= 600 ? 50 : 40),
-                    right: (window.innerWidth <= 400) ? 20 : (window.innerWidth <= 600 ? 25 : 30),
-                    bottom: (window.innerWidth <= 400) ? 80 : (window.innerWidth <= 600 ? 70 : 60),
-                    left: (window.innerWidth <= 400) ? 70 : (window.innerWidth <= 600 ? 65 : 80)
-                };
-                d3.select("#usd-purchasing-power-chart").selectAll("*").remove();
-                const svg = d3.select("#usd-purchasing-power-chart")
-                    .append("svg")
-                    .attr("width", internalWidth)
-                    .attr("height", internalHeight);
-                const x = d3.scaleTime()
-                    .domain(d3.extent(data, d => d.date))
-                    .range([margin.left, internalWidth - margin.right]);
-                const y = d3.scaleLog()
-                    .domain([Math.max(d3.min(data, d => d.value) * 0.8, 0.01), 1.05])
-                    .range([internalHeight - margin.bottom, margin.top])
-                    .clamp(true);
-                // X grid
-                svg.append("g")
-                    .attr("class", "grid")
-                    .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
-                    .call(d3.axisBottom(x)
-                        .ticks(6)
-                        .tickSize(-(internalHeight - margin.top - margin.bottom))
-                        .tickFormat("")
-                    );
-                // Y grid
-                svg.append("g")
-                    .attr("class", "grid")
-                    .attr("transform", `translate(${margin.left},0)`)
-                    .call(d3.axisLeft(y)
-                        .ticks(6)
-                        .tickSize(-(internalWidth - margin.left - margin.right))
-                        .tickFormat("")
-                    );
-                // X axis
-                const xAxis = svg.append("g")
-                    .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
-                    .call(d3.axisBottom(x).ticks(6));
-                if (window.innerWidth <= 600) {
-                    xAxis.selectAll("text")
-                        .attr("transform", "rotate(-45)")
-                        .style("text-anchor", "end");
-                }
-                // Y axis
-                svg.append("g")
-                    .attr("transform", `translate(${margin.left},0)`)
-                    .call(d3.axisLeft(y)
-                        .ticks(6)
-                        .tickFormat(d => d.toFixed(2))
-                    );
-                // Y label
-                svg.append("text")
-                    .attr("transform", "rotate(-90)")
-                    .attr("y", (window.innerWidth <= 400) ? 10 : (window.innerWidth <= 600 ? 10 : 15))
-                    .attr("x", 0 - (internalHeight / 2))
-                    .attr("dy", "-1em")
-                    .style("text-anchor", "middle")
-                    .text("Relative Purchasing Power");
-                // Line
-                const line = d3.line()
-                    .x(d => x(d.date))
-                    .y(d => y(d.value))
-                    .curve(d3.curveLinear);
-                svg.append("path")
-                    .datum(data)
-                    .attr("class", "line usd-purchasing-power-line")
-                    .attr("fill", "none")
-                    .attr("stroke", "#222")
-                    .attr("stroke-width", 2)
-                    .attr("d", line);
-                // Title
-                svg.append("text")
-                    .attr("x", internalWidth / 2)
-                    .attr("y", (window.innerWidth <= 400) ? 30 : (window.innerWidth <= 600 ? 25 : 20))
-                    .attr("text-anchor", "middle")
-                    .style("font-weight", "bold")
-                    .text("DOLLAR PURCHASING POWER (CPI)");
-            })();
+            // Find the first valid (non-zero, non-NaN) price
+            let firstValidPrice = null;
+            let firstValidIndex = -1;
 
-            // Helper function to get asset-specific inflation data
-            function getAssetInflationParams(assetInfo) {
+            for (let i = 0; i < series.price.length; i++) {
+                const price = series.price[i];
+                if (price && !isNaN(price) && price > 0) {
+                    firstValidPrice = price;
+                    firstValidIndex = i;
+                    break;
+                }
+            }
+
+            if (firstValidPrice === null) {
+                console.warn(`No valid first price for ${assetName}, all values are zero or invalid`);
+                return {
+                    ...series,
+                    price: series.price.map(_ => NaN),
+                };
+            }
+
+            console.log(`${assetName} first valid price: ${firstValidPrice} at index ${firstValidIndex}`);
+
+            // Start from the first valid price point
+            const normalizedTimestamps = series.timestamp.slice(firstValidIndex);
+            const normalizedPrices = series.price.slice(firstValidIndex).map(price => {
+                if (!price || isNaN(price) || price <= 0) {
+                    return NaN; // Handle invalid data points
+                }
+                return price / firstValidPrice;
+            });
+
+            console.log(`${assetName} normalized:`, {
+                length: normalizedPrices.length,
+                firstNormalized: normalizedPrices[0],
+                lastNormalized: normalizedPrices[normalizedPrices.length - 1],
+                maxValue: Math.max(...normalizedPrices.filter(p => !isNaN(p)))
+            });
+
+            return {
+                timestamp: normalizedTimestamps,
+                price: normalizedPrices,
+            };
+        }
+
+        // Helper function to get asset-specific inflation data
+        function getAssetInflationParams(assetInfo, fullCpiUData, cpiUFirstDate) {
             const daysAfterCpiUStart = daysBetween(
                 assetInfo.firstDate,
                 cpiUFirstDate
@@ -640,17 +442,75 @@
             // Calculate the multiplier from CPI_U start (1971) up to the asset's start date
             for (let i = 0; i < daysAfterCpiUStart; i++) {
                 if (fullCpiUData[i]) {
-                assetMultiplierFor1971 = bigIntMultiply(assetMultiplierFor1971, toBigInt(fullCpiUData[i].daily_multiplicator));
+                    assetMultiplierFor1971 = bigIntMultiply(assetMultiplierFor1971, toBigInt(fullCpiUData[i].daily_multiplicator));
                 } else {
-                break;
+                    break;
                 }
             }
             return { sliceRangeCPI_U: assetSliceRangeCPI_U, multiplierFor1971: fromBigInt(assetMultiplierFor1971) };
+        }
+
+        // Main application logic
+        async function main() {
+            console.log("Accessing global csvManager object:", csvManager);
+
+            const GOLD = "GOLD";
+            const CPI_U = "CPI_U";
+            const XMR = "XMR";
+            const ETH = "ETH";
+            const BTC = "BTC";
+
+            const datasetConfigs = [
+                { name: CPI_U, csvPath: 'datasets/daily_cpi_inflation.csv', fetchFunction: fetchCpiUData },
+                { name: GOLD, csvPath: 'datasets/gold.csv', fetchFunction: fetchGoldData },
+                { name: XMR, csvPath: 'datasets/monero_2014-05-21_2025-07-10.csv', fetchFunction: fetchXmrData },
+                { name: ETH, csvPath: 'datasets/ethereum_2015-08-07_2025-07-10.csv', fetchFunction: fetchEthData },
+                { name: BTC, csvPath: 'datasets/bitcoin_2010-07-17_2025-07-10.csv', fetchFunction: fetchBtcData },
+            ];
+
+            // Initialize all datasets
+            await csvManager.initAllDatasets(datasetConfigs);
+
+            // Get CPI_U data
+            const fullCpiUData = csvManager.getDataRange(
+                CPI_U,
+                csvManager.getFirstDate(CPI_U),
+                csvManager.getLastDate(CPI_U)
+            );
+
+            if (!fullCpiUData || fullCpiUData.length === 0) {
+                console.error("Error: No CPI data available");
+                return;
             }
 
+            let accumulated = 1;
+            const purchasingPower = {
+                timestamp: [],
+                value: []
+            };
+
+            for (const row of fullCpiUData) {
+                const dailyMult = parseFloat(row.daily_multiplicator);
+
+                if (isNaN(dailyMult) || dailyMult <= 0) continue;
+
+                accumulated *= dailyMult;
+
+                purchasingPower.timestamp.push(row.timestamp);
+                purchasingPower.value.push(1 / accumulated);
+            }
+
+            console.log("Purchasing Power Data:", purchasingPower);
+            console.log("First values:", purchasingPower.value.slice(0, 5));
+            console.log("Last values:", purchasingPower.value.slice(-5));
+
+            // Draw chart
+            chart_drawing.drawDollarPurchasingPowerChart(purchasingPower);
+
+            const cpiUFirstDate = csvManager.getFirstDate(CPI_U);
             // --- Process Gold data ---
             const infoGOLD = csvManager.getDatasetInfo(GOLD);
-            const goldInflationParams = getAssetInflationParams(infoGOLD);
+            const goldInflationParams = getAssetInflationParams(infoGOLD, fullCpiUData, cpiUFirstDate);
             const goldData = processAssetWithInflation(GOLD, goldInflationParams.sliceRangeCPI_U, goldInflationParams.multiplierFor1971);
 
             // Display Gold ATH values
@@ -660,56 +520,56 @@
 
             // Draw Gold chart
             const goldChartData = [
-            { data: goldData.normal, label: "Gold Price (Normal)", color: "orange", cssClass: "normal-gold-line" },
-            { data: goldData.inflationFixed, label: "Gold Inflation Adjusted (Fixed)", color: "blue", cssClass: "inflation-fixed-line" },
-            { data: goldData.inflation1971, label: "Gold Inflation Adjusted (1971)", color: "green", cssClass: "inflation-1971-line" }
+                { data: goldData.normal, label: "Gold Price (Normal)", color: "orange", cssClass: "normal-gold-line" },
+                { data: goldData.inflationFixed, label: "Gold Inflation Adjusted (Fixed)", color: "blue", cssClass: "inflation-fixed-line" },
+                { data: goldData.inflation1971, label: "Gold Inflation Adjusted (1971)", color: "green", cssClass: "inflation-1971-line" }
             ];
-            drawCombinedChart(goldChartData, "gold-chart", "Gold Price", "USD $");
+            chart_drawing.drawCombinedChart(goldChartData, "gold-chart", "Gold Price", "USD $");
 
             // --- Process ETH data ---
             const infoETH = csvManager.getDatasetInfo(ETH);
-            const ethInflationParams = getAssetInflationParams(infoETH);
+            const ethInflationParams = getAssetInflationParams(infoETH, fullCpiUData, cpiUFirstDate);
             const ethData = processAssetWithInflation(ETH, ethInflationParams.sliceRangeCPI_U, ethInflationParams.multiplierFor1971);
             document.getElementById('eth-ath-normal').textContent = `$${ethData.normal.ATH.toFixed(2)}`;
             document.getElementById('eth-ath-inflation-fixed').textContent = `$${ethData.inflationFixed.ATH.toFixed(2)}`;
             document.getElementById('eth-ath-inflation-1971').textContent = `$${ethData.inflation1971.ATH.toFixed(2)}`;
 
             const ethChartData = [
-            { data: ethData.normal, label: "ETH Price (Normal)", color: "purple", cssClass: "normal-eth-line" },
-            { data: ethData.inflationFixed, label: "ETH Inflation Adjusted (Fixed)", color: "blue", cssClass: "inflation-fixed-eth-line" },
-            { data: ethData.inflation1971, label: "ETH Inflation Adjusted (1971)", color: "green", cssClass: "inflation-1971-eth-line" }
+                { data: ethData.normal, label: "ETH Price (Normal)", color: "purple", cssClass: "normal-eth-line" },
+                { data: ethData.inflationFixed, label: "ETH Inflation Adjusted (Fixed)", color: "blue", cssClass: "inflation-fixed-eth-line" },
+                { data: ethData.inflation1971, label: "ETH Inflation Adjusted (1971)", color: "green", cssClass: "inflation-1971-eth-line" }
             ];
-            drawCombinedChart(ethChartData, "eth-chart", "Ethereum Price", "USD $");
+            chart_drawing.drawCombinedChart(ethChartData, "eth-chart", "Ethereum Price", "USD $");
 
             // --- Process BTC data ---
             const infoBTC = csvManager.getDatasetInfo(BTC);
-            const btcInflationParams = getAssetInflationParams(infoBTC);
+            const btcInflationParams = getAssetInflationParams(infoBTC, fullCpiUData, cpiUFirstDate);
             const btcData = processAssetWithInflation(BTC, btcInflationParams.sliceRangeCPI_U, btcInflationParams.multiplierFor1971);
             document.getElementById('btc-ath-normal').textContent = `$${btcData.normal.ATH.toFixed(2)}`;
             document.getElementById('btc-ath-inflation-fixed').textContent = `$${btcData.inflationFixed.ATH.toFixed(2)}`;
             document.getElementById('btc-ath-inflation-1971').textContent = `$${btcData.inflation1971.ATH.toFixed(2)}`;
 
             const btcChartData = [
-            { data: btcData.normal, label: "BTC Price (Normal)", color: "orange", cssClass: "normal-btc-line" },
-            { data: btcData.inflationFixed, label: "BTC Inflation Adjusted (Fixed)", color: "blue", cssClass: "inflation-fixed-btc-line" },
-            { data: btcData.inflation1971, label: "BTC Inflation Adjusted (1971)", color: "green", cssClass: "inflation-1971-btc-line" }
+                { data: btcData.normal, label: "BTC Price (Normal)", color: "orange", cssClass: "normal-btc-line" },
+                { data: btcData.inflationFixed, label: "BTC Inflation Adjusted (Fixed)", color: "blue", cssClass: "inflation-fixed-btc-line" },
+                { data: btcData.inflation1971, label: "BTC Inflation Adjusted (1971)", color: "green", cssClass: "inflation-1971-btc-line" }
             ];
-            drawCombinedChart(btcChartData, "btc-chart", "Bitcoin Price", "USD $");
+            chart_drawing.drawCombinedChart(btcChartData, "btc-chart", "Bitcoin Price", "USD $");
 
             // --- Process XMR data ---
             const infoXMR = csvManager.getDatasetInfo(XMR);
-            const xmrInflationParams = getAssetInflationParams(infoXMR);
+            const xmrInflationParams = getAssetInflationParams(infoXMR, fullCpiUData, cpiUFirstDate);
             const xmrData = processAssetWithInflation(XMR, xmrInflationParams.sliceRangeCPI_U, xmrInflationParams.multiplierFor1971);
             document.getElementById('xmr-ath-normal').textContent = `$${xmrData.normal.ATH.toFixed(2)}`;
             document.getElementById('xmr-ath-inflation-fixed').textContent = `$${xmrData.inflationFixed.ATH.toFixed(2)}`;
             document.getElementById('xmr-ath-inflation-1971').textContent = `$${xmrData.inflation1971.ATH.toFixed(2)}`;
 
             const xmrChartData = [
-            { data: xmrData.normal, label: "XMR Price (Normal)", color: "red", cssClass: "normal-xmr-line" },
-            { data: xmrData.inflationFixed, label: "XMR Inflation Adjusted (Fixed)", color: "blue", cssClass: "inflation-fixed-xmr-line" },
-            { data: xmrData.inflation1971, label: "XMR Inflation Adjusted (1971)", color: "green", cssClass: "inflation-1971-xmr-line" }
+                { data: xmrData.normal, label: "XMR Price (Normal)", color: "red", cssClass: "normal-xmr-line" },
+                { data: xmrData.inflationFixed, label: "XMR Inflation Adjusted (Fixed)", color: "blue", cssClass: "inflation-fixed-xmr-line" },
+                { data: xmrData.inflation1971, label: "XMR Inflation Adjusted (1971)", color: "green", cssClass: "inflation-1971-xmr-line" }
             ];
-            drawCombinedChart(xmrChartData, "xmr-chart", "Monero Price", "USD $");
+            chart_drawing.drawCombinedChart(xmrChartData, "xmr-chart", "Monero Price", "USD $");
 
             // Calculate gold-adjusted crypto prices using BigInt
             const ethGoldAdjusted = calculateGoldAdjustedCrypto(ethData.normal, goldData.normal);
@@ -725,68 +585,9 @@
                 { data: btcGoldAdjusted, label: "BTC/Gold", color: "orange", cssClass: "btc-gold-line" },
                 { data: xmrGoldAdjusted, label: "XMR/Gold", color: "red", cssClass: "xmr-gold-line" }
             ];
-            drawCombinedChart(goldAdjustedChartData, "gold-adjusted-crypto-chart", "Crypto Assets Adjusted by Gold", "Ounces of Gold");
-
-
+            chart_drawing.drawCombinedChart(goldAdjustedChartData, "gold-adjusted-crypto-chart", "Crypto Assets Adjusted by Gold", "Ounces of Gold");
 
             // --- Improved Relative Growth in USD (No Gold) Chart ---
-            function normalizeUsdSeriesFromOwnStart(series, assetName = "") {
-                console.log(`Processing ${assetName}:`, {
-                    dataLength: series.price.length,
-                    firstPrice: series.price[0],
-                    firstTimestamp: series.timestamp[0]
-                });
-                
-                if (!series.price.length) {
-                    console.warn(`No price data for ${assetName}`);
-                    return { ...series };
-                }
-                
-                // Find the first valid (non-zero, non-NaN) price
-                let firstValidPrice = null;
-                let firstValidIndex = -1;
-                
-                for (let i = 0; i < series.price.length; i++) {
-                    const price = series.price[i];
-                    if (price && !isNaN(price) && price > 0) {
-                        firstValidPrice = price;
-                        firstValidIndex = i;
-                        break;
-                    }
-                }
-                
-                if (firstValidPrice === null) {
-                    console.warn(`No valid first price for ${assetName}, all values are zero or invalid`);
-                    return {
-                        ...series,
-                        price: series.price.map(_ => NaN),
-                    };
-                }
-                
-                console.log(`${assetName} first valid price: ${firstValidPrice} at index ${firstValidIndex}`);
-                
-                // Start from the first valid price point
-                const normalizedTimestamps = series.timestamp.slice(firstValidIndex);
-                const normalizedPrices = series.price.slice(firstValidIndex).map(price => {
-                    if (!price || isNaN(price) || price <= 0) {
-                        return NaN; // Handle invalid data points
-                    }
-                    return price / firstValidPrice;
-                });
-                
-                console.log(`${assetName} normalized:`, {
-                    length: normalizedPrices.length,
-                    firstNormalized: normalizedPrices[0],
-                    lastNormalized: normalizedPrices[normalizedPrices.length - 1],
-                    maxValue: Math.max(...normalizedPrices.filter(p => !isNaN(p)))
-                });
-                
-                return {
-                    timestamp: normalizedTimestamps,
-                    price: normalizedPrices,
-                };
-            }
-
             // Apply normalization with better error handling
             const btcUsdRelative = normalizeUsdSeriesFromOwnStart(btcData.normal, "BTC");
             const ethUsdRelative = normalizeUsdSeriesFromOwnStart(ethData.normal, "ETH");
@@ -794,236 +595,33 @@
 
             // Enhanced chart data with better colors and styling
             const cryptoRelativeGrowthUsdChartData = [
-                { 
-                    data: btcUsdRelative, 
-                    label: "BTC (USD Relative Growth)", 
+                {
+                    data: btcUsdRelative,
+                    label: "BTC (Relative Price Ratio)",
                     color: "#f7931a", // Bitcoin orange
-                    cssClass: "btc-usd-rel-line" 
+                    cssClass: "btc-usd-rel-line"
                 },
-                { 
-                    data: ethUsdRelative, 
-                    label: "ETH (USD Relative Growth)", 
+                {
+                    data: ethUsdRelative,
+                    label: "ETH (Relative Price Ratio)",
                     color: "#627eea", // Ethereum blue
-                    cssClass: "eth-usd-rel-line" 
+                    cssClass: "eth-usd-rel-line"
                 },
-                { 
-                    data: xmrUsdRelative, 
-                    label: "XMR (USD Relative Growth)", 
+                {
+                    data: xmrUsdRelative,
+                    label: "XMR (Relative Price Ratio)",
                     color: "#ff6600", // Monero orange
-                    cssClass: "xmr-usd-rel-line" 
+                    cssClass: "xmr-usd-rel-line"
                 }
             ];
 
-            // Modified drawCombinedChart function for better logarithmic scaling
-            function drawRelativeGrowthChart(dataSets, divId = "crypto-relative-growth-usd-chart") {
-                const chartDiv = document.getElementById(divId);
-                if (!chartDiv) {
-                    console.log(`Chart container with id ${divId} not found.`);
-                    return;
-                }
-
-                const containerWidth = chartDiv.clientWidth;
-                const containerHeight = chartDiv.clientHeight > 0 ? chartDiv.clientHeight : (window.innerWidth <= 600 ? 400 : 400);
-
-                const internalWidth = containerWidth;
-                const internalHeight = (window.innerWidth <= 400) ? 450 : (window.innerWidth <= 600 ? 400 : 400);
-
-                const margin = {
-                    top: (window.innerWidth <= 400) ? 60 : (window.innerWidth <= 600 ? 50 : 40),
-                    right: (window.innerWidth <= 400) ? 20 : (window.innerWidth <= 600 ? 25 : 30),
-                    bottom: (window.innerWidth <= 400) ? 80 : (window.innerWidth <= 600 ? 70 : 60),
-                    left: (window.innerWidth <= 400) ? 70 : (window.innerWidth <= 600 ? 65 : 80) // More space for larger numbers
-                };
-
-                // Clear previous chart
-                d3.select(`#${divId}`).selectAll("*").remove();
-
-                // Prepare data and find valid ranges
-                let allDates = [];
-                let allPrices = [];
-                let validDataSets = [];
-
-                dataSets.forEach(dataSet => {
-                    const validPrices = dataSet.data.price.filter(p => !isNaN(p) && p > 0);
-                    if (validPrices.length > 0) {
-                        dataSet.parsedData = dataSet.data.timestamp.map((d, i) => ({
-                            date: new Date(d),
-                            price: dataSet.data.price[i]
-                        })).filter(d => !isNaN(d.price) && d.price > 0);
-                        
-                        if (dataSet.parsedData.length > 0) {
-                            validDataSets.push(dataSet);
-                            allDates = allDates.concat(dataSet.parsedData.map(d => d.date));
-                            allPrices = allPrices.concat(dataSet.parsedData.map(d => d.price));
-                        }
-                    }
-                });
-
-                if (validDataSets.length === 0) {
-                    console.error("No valid data to display in relative growth chart");
-                    return;
-                }
-
-                // Create SVG
-                const svg = d3.select(`#${divId}`)
-                    .append("svg")
-                    .attr("width", internalWidth)
-                    .attr("height", internalHeight);
-
-                // Scales - Use log scale for Y-axis to better show relative growth
-                const x = d3.scaleTime()
-                    .domain(d3.extent(allDates))
-                    .range([margin.left, internalWidth - margin.right]);
-
-                const maxPrice = d3.max(allPrices);
-                const minPrice = d3.min(allPrices.filter(p => p > 0));
-                
-                // Use log scale if the range is very large, otherwise linear
-                const useLogScale = maxPrice / minPrice > 100;
-                
-                let y;
-                if (useLogScale) {
-                    y = d3.scaleLog()
-                        .domain([Math.max(minPrice * 0.8, 0.1), maxPrice * 1.2])
-                        .range([internalHeight - margin.bottom, margin.top])
-                        .clamp(true);
-                } else {
-                    y = d3.scaleLinear()
-                        .domain([0, maxPrice * 1.05])
-                        .range([internalHeight - margin.bottom, margin.top]);
-                }
-
-                // Grid lines
-                const numXTicks = (window.innerWidth <= 400) ? 3 : (window.innerWidth <= 600 ? 4 : 6);
-                const numYTicks = (window.innerWidth <= 400) ? 4 : (window.innerWidth <= 600 ? 5 : 6);
-
-                // X-axis grid
-                svg.append("g")
-                    .attr("class", "grid")
-                    .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
-                    .call(d3.axisBottom(x)
-                        .ticks(numXTicks)
-                        .tickSize(-(internalHeight - margin.top - margin.bottom))
-                        .tickFormat("")
-                    );
-
-                // Y-axis grid
-                svg.append("g")
-                    .attr("class", "grid")
-                    .attr("transform", `translate(${margin.left},0)`)
-                    .call(d3.axisLeft(y)
-                        .ticks(numYTicks)
-                        .tickSize(-(internalWidth - margin.left - margin.right))
-                        .tickFormat("")
-                    );
-
-                // X-axis
-                const xAxis = svg.append("g")
-                    .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
-                    .call(d3.axisBottom(x).ticks(numXTicks));
-
-                if (window.innerWidth <= 600) {
-                    xAxis.selectAll("text")
-                        .attr("transform", "rotate(-45)")
-                        .style("text-anchor", "end");
-                }
-
-                // Y-axis with better formatting
-                const yAxis = svg.append("g")
-                    .attr("transform", `translate(${margin.left},0)`)
-                    .call(d3.axisLeft(y)
-                        .ticks(numYTicks)
-                        .tickFormat(d => {
-                            if (d >= 1000000) return `${(d/1000000).toFixed(1)}M`;
-                            if (d >= 1000) return `${(d/1000).toFixed(1)}K`;
-                            if (d >= 1) return `${d.toFixed(0)}x`;
-                            return d.toFixed(2);
-                        })
-                    );
-
-                // Y-axis label
-                svg.append("text")
-                    .attr("transform", "rotate(-90)")
-                    .attr("y", (window.innerWidth <= 400) ? 10 : (window.innerWidth <= 600 ? 10 : 15))
-                    .attr("x", 0 - (internalHeight / 2))
-                    .attr("dy", "-1em")
-                    .style("text-anchor", "middle")
-                    .text("Growth Multiplier");
-
-                // Line generator
-                const line = d3.line()
-                    .x(d => x(d.date))
-                    .y(d => y(d.price))
-                    .curve(d3.curveLinear)
-                    .defined(d => !isNaN(d.price) && d.price > 0); // Only draw valid points
-
-                // Draw each line
-                validDataSets.forEach(dataSet => {
-                    svg.append("path")
-                        .datum(dataSet.parsedData)
-                        .attr("class", `line ${dataSet.cssClass}`)
-                        .attr("fill", "none")
-                        .attr("stroke", dataSet.color)
-                        .attr("stroke-width", 2)
-                        .attr("d", line);
-                });
-
-                // Title
-                svg.append("text")
-                    .attr("x", internalWidth / 2)
-                    .attr("y", (window.innerWidth <= 400) ? 30 : (window.innerWidth <= 600 ? 25 : 20))
-                    .attr("text-anchor", "middle")
-                    .style("font-weight", "bold")
-                    .text("CRYPTO RELATIVE GROWTH IN USD");
-
-                // Add Legend
-                const legend = svg.append("g")
-                    .attr("class", "legend")
-                    .attr("transform", `translate(${margin.left}, ${internalHeight - margin.bottom + 40})`);
-
-                validDataSets.forEach((d, i) => {
-                    const legendRow = legend.append("g")
-                        .attr("transform", `translate(0, ${i * 20})`);
-
-                    legendRow.append("rect")
-                        .attr("width", 10)
-                        .attr("height", 10)
-                        .attr("fill", d.color);
-
-                    legendRow.append("text")
-                        .attr("x", 20)
-                        .attr("y", 10)
-                        .attr("text-anchor", "start")
-                        .style("font-size", "0.8em")
-                        .text(d.label);
-                });
-
-                // Add reference line at 1x
-                svg.append("line")
-                    .attr("x1", margin.left)
-                    .attr("x2", internalWidth - margin.right)
-                    .attr("y1", y(1))
-                    .attr("y2", y(1))
-                    .attr("stroke", "#666")
-                    .attr("stroke-dasharray", "3,3")
-                    .attr("opacity", 0.5);
-
-                // Add 1x label
-                svg.append("text")
-                    .attr("x", margin.left + 5)
-                    .attr("y", y(1) - 5)
-                    .style("font-size", "0.7em")
-                    .style("fill", "#666")
-                    .text("1x");
-            }
-
             // Use the improved chart function
-            drawRelativeGrowthChart(
+            chart_drawing.drawRelativeGrowthChart(
                 cryptoRelativeGrowthUsdChartData,
                 "crypto-relative-growth-usd-chart"
             );
-
         }
+
         // Run main when page loads
         main().catch(console.error);
     </script>
