@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitcoin Halvings</title>
+    <link rel="icon" type="image/svg+xml" href="static/favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>
+    <script src="scripts/chart_draw.js"></script>
+    <script src="scripts/dataset_manager.js"></script>
+</head>
+<body>
+    <header>
+        <a href="index.html"><h1>Bitcoin Halvings</h1></a>
+    </header>
+    <section style="margin-bottom:2em;">
+        <p>This chart shows the dates of Bitcoin halvings with vertical lines. The areas 500 days before and after each halving are highlighted with different colors. The estimated date of the next halving is also displayed.</p>
+    </section>
+    <div id="halving-chart" class="brutalist-chart"></div>
+    <div id="next-halving" style="margin-top:2em;font-weight:bold;color:#ffb300;"></div>
+    <script>
+    async function main() {
+        // Read halving timestamps from halvings.txt
+        const halvingTimestamps = await fetch('datasets/halvings.txt')
+            .then(response => response.text())
+            .then(text => text
+            .split('\n')
+            .map(line => line.trim())
+            .filter(line => line && !isNaN(line))
+            .map(Number)
+            );
+        const halvings = halvingTimestamps.map(ts => new Date(ts * 1000));
+        const lastHalving = halvings[halvings.length-1];
+        const nextHalving = new Date(lastHalving.getTime() + 4*365.25*24*3600*1000);
+        document.getElementById('next-halving').textContent = `Estimated next halving: ${nextHalving.toLocaleDateString()}`;
+
+        // Load BTC dataset
+        await csvManager.initDataset(
+            'BTC',
+            'datasets/bitcoin_2010-07-17_2025-07-10.csv'
+        );
+        const infoBTC = csvManager.getDatasetInfo('BTC');
+        const btcData = {
+            timestamp: [],
+            price: []
+        };
+        csvManager.iterateRange(
+            'BTC',
+            infoBTC.firstDate,
+            infoBTC.lastDate,
+            (date, data) => {
+                btcData.timestamp.push(new Date(date));
+                btcData.price.push(data.Close);
+            }
+        );
+
+        // Use halvingDraw from chart_draw.js, now with BTC price line
+        halvingDraw({
+            divId: 'halving-chart',
+            halvingTimestamps,
+            nextHalving,
+            width: document.getElementById('halving-chart').clientWidth || 800,
+            height: document.getElementById('halving-chart').clientHeight || 400,
+            btcData
+        });
+    }
+    main();
+    </script>
+</body>
+</html>

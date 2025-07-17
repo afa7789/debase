@@ -1,3 +1,188 @@
+// Draw Bitcoin Halving Chart with vertical lines and shaded regions - CORRIGIDO
+function halvingDraw({
+	divId = 'halving-chart',
+	halvingTimestamps = [],
+	nextHalving = null,
+	width = 800,
+	height = 400,
+	btcData = null
+}) {
+	const chartDiv = document.getElementById(divId);
+	if (!chartDiv) return;
+	
+	chartDiv.style.height = height + 'px';
+	chartDiv.style.width = '100%';
+	
+	const margin = {top: 40, right: 30, bottom: 60, left: 60};
+	const halvings = halvingTimestamps.map(ts => new Date(ts * 1000));
+	
+	// X scale: from first halving - 600 days to next halving + 600 days
+	const minDate = new Date(halvings[0].getTime() - 600 * 24 * 3600 * 1000);
+	const maxDate = new Date(nextHalving.getTime() + 600 * 24 * 3600 * 1000);
+	const x = d3.scaleTime()
+		.domain([minDate, maxDate])
+		.range([margin.left, width - margin.right]);
+	
+	// Limpar conteúdo anterior
+	d3.select(`#${divId}`).selectAll('*').remove();
+	
+	// Criar SVG
+	const svg = d3.select(`#${divId}`)
+		.append('svg')
+		.attr('width', width)
+		.attr('height', height);
+	
+	// Primeiro desenhar as áreas coloridas (fundo)
+	halvings.forEach((halving, i) => {
+		const beforeStart = new Date(halving.getTime() - 500 * 24 * 3600 * 1000);
+		const afterEnd = new Date(halving.getTime() + 500 * 24 * 3600 * 1000);
+		
+		// Área antes do halving (azul claro)
+		svg.append('rect')
+			.attr('x', Math.max(margin.left, x(beforeStart)))
+			.attr('y', margin.top)
+			.attr('width', Math.max(0, x(halving) - Math.max(margin.left, x(beforeStart))))
+			.attr('height', height - margin.top - margin.bottom)
+			.attr('fill', '#e0f7fa')
+			.attr('opacity', 0.15);
+		
+		// Área após o halving (laranja claro)
+		svg.append('rect')
+			.attr('x', x(halving))
+			.attr('y', margin.top)
+			.attr('width', Math.max(0, Math.min(width - margin.right, x(afterEnd)) - x(halving)))
+			.attr('height', height - margin.top - margin.bottom)
+			.attr('fill', '#ffe0b2')
+			.attr('opacity', 0.15);
+	});
+	
+	// Desenhar linha do preço do BTC se fornecida
+	if (btcData && btcData.timestamp && btcData.price && btcData.timestamp.length > 0) {
+		// Filtrar dados dentro do range do gráfico
+		const filteredData = btcData.timestamp
+			.map((date, i) => ({date, price: btcData.price[i]}))
+			.filter(d => d.date >= minDate && d.date <= maxDate && d.price > 0);
+		
+		if (filteredData.length > 0) {
+			// Y scale para preço BTC (logarítmica)
+			const minPrice = Math.max(0.01, d3.min(filteredData, d => d.price));
+			const maxPrice = d3.max(filteredData, d => d.price);
+			const btcY = d3.scaleLog()
+				.domain([minPrice, maxPrice])
+				.range([height - margin.bottom, margin.top]);
+			
+			// Linha principal do BTC (laranja)
+			const btcLine = d3.line()
+				.x(d => x(d.date))
+				.y(d => btcY(d.price))
+				.curve(d3.curveMonotoneX);
+			
+			svg.append('path')
+				.datum(filteredData)
+				.attr('fill', 'none')
+				.attr('stroke', '#f7931a')
+				.attr('stroke-width', 2)
+				.attr('d', btcLine);
+			
+			// Desenhar linhas coloridas para períodos específicos
+			halvings.forEach((halving, i) => {
+				// 500 dias antes do halving (azul)
+				const beforeStart = new Date(halving.getTime() - 500 * 24 * 3600 * 1000);
+				const beforeData = filteredData.filter(d => d.date >= beforeStart && d.date <= halving);
+				
+				if (beforeData.length > 1) {
+					svg.append('path')
+						.datum(beforeData)
+						.attr('fill', 'none')
+						.attr('stroke', '#1976d2')
+						.attr('stroke-width', 3)
+						.attr('d', btcLine);
+				}
+				
+				// 500 dias após o halving (verde)
+				const afterEnd = new Date(halving.getTime() + 500 * 24 * 3600 * 1000);
+				const afterData = filteredData.filter(d => d.date >= halving && d.date <= afterEnd);
+				
+				if (afterData.length > 1) {
+					svg.append('path')
+						.datum(afterData)
+						.attr('fill', 'none')
+						.attr('stroke', '#388e3c')
+						.attr('stroke-width', 3)
+						.attr('d', btcLine);
+				}
+			});
+			
+			// Adicionar eixo Y para preço BTC
+			svg.append('g')
+				.attr('transform', `translate(${margin.left}, 0)`)
+				.call(d3.axisLeft(btcY).tickFormat(d => `$${d}`));
+			
+			// Label do eixo Y
+			svg.append('text')
+				.attr('transform', 'rotate(-90)')
+				.attr('y', margin.left - 50)
+				.attr('x', 0 - height / 2)
+				.attr('dy', '1em')
+				.style('text-anchor', 'middle')
+				.style('fill', '#f7931a')
+				.text('BTC Price (USD, log scale)');
+		}
+	}
+	
+	// Desenhar linhas verticais dos halvings
+	halvings.forEach((halving, i) => {
+		svg.append('line')
+			.attr('x1', x(halving))
+			.attr('x2', x(halving))
+			.attr('y1', margin.top)
+			.attr('y2', height - margin.bottom)
+			.attr('stroke', '#d32f2f')
+			.attr('stroke-width', 2);
+		
+		// Labels dos halvings
+		svg.append('text')
+			.attr('x', x(halving))
+			.attr('y', margin.top - 10)
+			.attr('text-anchor', 'middle')
+			.attr('fill', '#d32f2f')
+			.style('font-size', '0.8em')
+			.text(`Halving ${i + 1}`);
+	});
+	
+	// Desenhar linha vertical para próximo halving
+	if (nextHalving) {
+		svg.append('line')
+			.attr('x1', x(nextHalving))
+			.attr('x2', x(nextHalving))
+			.attr('y1', margin.top)
+			.attr('y2', height - margin.bottom)
+			.attr('stroke', '#1976d2')
+			.attr('stroke-width', 2)
+			.attr('stroke-dasharray', '4,2');
+		
+		svg.append('text')
+			.attr('x', x(nextHalving))
+			.attr('y', margin.top - 10)
+			.attr('text-anchor', 'middle')
+			.attr('fill', '#1976d2')
+			.style('font-size', '0.8em')
+			.text('Next Halving');
+	}
+	
+	// Adicionar eixo X (tempo)
+	svg.append('g')
+		.attr('transform', `translate(0, ${height - margin.bottom})`)
+		.call(d3.axisBottom(x).tickFormat(d3.timeFormat('%Y')));
+	
+	// Título do gráfico
+	svg.append('text')
+		.attr('x', width / 2)
+		.attr('y', margin.top - 20)
+		.attr('text-anchor', 'middle')
+		.text('Bitcoin Halvings')
+		.style('font-weight', 'bold');
+}
 // scripts/chart_draw.js
 // All chart drawing functions for DEBASE
 
@@ -192,163 +377,163 @@ function drawCombinedChart(
 
 // Function to draw Dollar Purchasing Power Chart
 function drawDollarPurchasingPowerChart(purchasingPowerData) {
-    // Validate input data
-    if (!purchasingPowerData || !purchasingPowerData.timestamp || !purchasingPowerData.value) {
-        console.error("Error: Invalid or missing purchasingPowerData");
-        return;
-    }
-    if (purchasingPowerData.timestamp.length !== purchasingPowerData.value.length) {
-        console.error("Error: Mismatch between timestamp and value arrays");
-        return;
-    }
+	// Validate input data
+	if (!purchasingPowerData || !purchasingPowerData.timestamp || !purchasingPowerData.value) {
+		console.error("Error: Invalid or missing purchasingPowerData");
+		return;
+	}
+	if (purchasingPowerData.timestamp.length !== purchasingPowerData.value.length) {
+		console.error("Error: Mismatch between timestamp and value arrays");
+		return;
+	}
 
-    // Transform and validate data
-    const data = purchasingPowerData.timestamp
-        .map((d, i) => {
-            const date = new Date(d);
-            const value = purchasingPowerData.value[i];
-            
-            // Log problematic data points
-            if (isNaN(date) || !isFinite(value) || value <= 0) {
-                console.warn("Invalid data point:", { timestamp: d, value: value, date: date });
-            }
-            
-            return { date, value };
-        })
-        .filter(d => !isNaN(d.date) && isFinite(d.value) && d.value > 0);
+	// Transform and validate data
+	const data = purchasingPowerData.timestamp
+		.map((d, i) => {
+			const date = new Date(d);
+			const value = purchasingPowerData.value[i];
+			
+			// Log problematic data points
+			if (isNaN(date) || !isFinite(value) || value <= 0) {
+				console.warn("Invalid data point:", { timestamp: d, value: value, date: date });
+			}
+			
+			return { date, value };
+		})
+		.filter(d => !isNaN(d.date) && isFinite(d.value) && d.value > 0);
 
-    console.log("Filtered data length:", data.length);
-    console.log("First few data points:", data.slice(0, 5));
+	console.log("Filtered data length:", data.length);
+	console.log("First few data points:", data.slice(0, 5));
 
-    if (data.length === 0) {
-        console.error("Error: No valid data points after filtering");
-        return;
-    }
+	if (data.length === 0) {
+		console.error("Error: No valid data points after filtering");
+		return;
+	}
 
-    const chartDiv = document.getElementById("usd-purchasing-power-chart");
-    if (!chartDiv) {
-        console.error("Error: Chart container #usd-purchasing-power-chart not found");
-        return;
-    }
+	const chartDiv = document.getElementById("usd-purchasing-power-chart");
+	if (!chartDiv) {
+		console.error("Error: Chart container #usd-purchasing-power-chart not found");
+		return;
+	}
 
-    // Container dimensions
-    const containerWidth = chartDiv.clientWidth || window.innerWidth;
-    const containerHeight = chartDiv.clientHeight > 0 ? chartDiv.clientHeight : (window.innerWidth <= 600 ? 400 : 400);
-    const internalWidth = containerWidth;
-    const internalHeight = window.innerWidth <= 400 ? 450 : window.innerWidth <= 600 ? 400 : 400;
+	// Container dimensions
+	const containerWidth = chartDiv.clientWidth || window.innerWidth;
+	const containerHeight = chartDiv.clientHeight > 0 ? chartDiv.clientHeight : (window.innerWidth <= 600 ? 400 : 400);
+	const internalWidth = containerWidth;
+	const internalHeight = window.innerWidth <= 400 ? 450 : window.innerWidth <= 600 ? 400 : 400;
 
-    const margin = {
-        top: window.innerWidth <= 400 ? 60 : window.innerWidth <= 600 ? 50 : 40,
-        right: window.innerWidth <= 400 ? 20 : window.innerWidth <= 600 ? 25 : 30,
-        bottom: window.innerWidth <= 400 ? 80 : window.innerWidth <= 600 ? 70 : 60,
-        left: window.innerWidth <= 400 ? 70 : window.innerWidth <= 600 ? 65 : 80,
-    };
+	const margin = {
+		top: window.innerWidth <= 400 ? 60 : window.innerWidth <= 600 ? 50 : 40,
+		right: window.innerWidth <= 400 ? 20 : window.innerWidth <= 600 ? 25 : 30,
+		bottom: window.innerWidth <= 400 ? 80 : window.innerWidth <= 600 ? 70 : 60,
+		left: window.innerWidth <= 400 ? 70 : window.innerWidth <= 600 ? 65 : 80,
+	};
 
-    // Clear previous content
-    d3.select("#usd-purchasing-power-chart").selectAll("*").remove();
+	// Clear previous content
+	d3.select("#usd-purchasing-power-chart").selectAll("*").remove();
 
-    const svg = d3
-        .select("#usd-purchasing-power-chart")
-        .append("svg")
-        .attr("width", internalWidth)
-        .attr("height", internalHeight);
+	const svg = d3
+		.select("#usd-purchasing-power-chart")
+		.append("svg")
+		.attr("width", internalWidth)
+		.attr("height", internalHeight);
 
-    // Scales
-    const x = d3
-        .scaleTime()
-        .domain(d3.extent(data, (d) => d.date))
-        .range([margin.left, internalWidth - margin.right]);
+	// Scales
+	const x = d3
+		.scaleTime()
+		.domain(d3.extent(data, (d) => d.date))
+		.range([margin.left, internalWidth - margin.right]);
 
-    const y = d3
-        .scaleLog()
-        .domain([Math.max(d3.min(data, (d) => d.value) * 0.8, 0.01), 1.05])
-        .range([internalHeight - margin.bottom, margin.top])
-        .clamp(true);
+	const y = d3
+		.scaleLog()
+		.domain([Math.max(d3.min(data, (d) => d.value) * 0.8, 0.01), 1.05])
+		.range([internalHeight - margin.bottom, margin.top])
+		.clamp(true);
 
-    // X grid
-    svg.append("g")
-        .attr("class", "grid")
-        .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
-        .call(
-            d3
-                .axisBottom(x)
-                .ticks(6)
-                .tickSize(-(internalHeight - margin.top - margin.bottom))
-                .tickFormat("")
-        );
+	// X grid
+	svg.append("g")
+		.attr("class", "grid")
+		.attr("transform", `translate(0,${internalHeight - margin.bottom})`)
+		.call(
+			d3
+				.axisBottom(x)
+				.ticks(6)
+				.tickSize(-(internalHeight - margin.top - margin.bottom))
+				.tickFormat("")
+		);
 
-    // Y grid
-    svg.append("g")
-        .attr("class", "grid")
-        .attr("transform", `translate(${margin.left},0)`)
-        .call(
-            d3
-                .axisLeft(y)
-                .ticks(6)
-                .tickSize(-(internalWidth - margin.left - margin.right))
-                .tickFormat("")
-        );
+	// Y grid
+	svg.append("g")
+		.attr("class", "grid")
+		.attr("transform", `translate(${margin.left},0)`)
+		.call(
+			d3
+				.axisLeft(y)
+				.ticks(6)
+				.tickSize(-(internalWidth - margin.left - margin.right))
+				.tickFormat("")
+		);
 
-    // X axis
-    const xAxis = svg
-        .append("g")
-        .attr("transform", `translate(0,${internalHeight - margin.bottom})`)
-        .call(d3.axisBottom(x).ticks(6));
+	// X axis
+	const xAxis = svg
+		.append("g")
+		.attr("transform", `translate(0,${internalHeight - margin.bottom})`)
+		.call(d3.axisBottom(x).ticks(6));
 
-    if (window.innerWidth <= 600) {
-        xAxis
-            .selectAll("text")
-            .attr("transform", "rotate(-45)")
-            .style("text-anchor", "end");
-    }
+	if (window.innerWidth <= 600) {
+		xAxis
+			.selectAll("text")
+			.attr("transform", "rotate(-45)")
+			.style("text-anchor", "end");
+	}
 
-    // Y axis - CORREÇÃO: remover .chair_drawing
-    svg.append("g")
-        .attr("transform", `translate(${margin.left},0)`)
-        .call(
-            d3
-                .axisLeft(y)
-                .ticks(6)
-                .tickFormat((d) => d.toFixed(2))
-        );
+	// Y axis - CORREÇÃO: remover .chair_drawing
+	svg.append("g")
+		.attr("transform", `translate(${margin.left},0)`)
+		.call(
+			d3
+				.axisLeft(y)
+				.ticks(6)
+				.tickFormat((d) => d.toFixed(2))
+		);
 
-    // Y label
-    svg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr(
-            "y",
-            window.innerWidth <= 400 ? 10 : window.innerWidth <= 600 ? 10 : 15
-        )
-        .attr("x", 0 - internalHeight / 2)
-        .attr("dy", "-1em")
-        .style("text-anchor", "middle")
-        .text("Relative Purchasing Power");
+	// Y label
+	svg.append("text")
+		.attr("transform", "rotate(-90)")
+		.attr(
+			"y",
+			window.innerWidth <= 400 ? 10 : window.innerWidth <= 600 ? 10 : 15
+		)
+		.attr("x", 0 - internalHeight / 2)
+		.attr("dy", "-1em")
+		.style("text-anchor", "middle")
+		.text("Relative Purchasing Power");
 
-    // Line
-    const line = d3
-        .line()
-        .x((d) => x(d.date))
-        .y((d) => y(d.value))
-        .curve(d3.curveLinear);
+	// Line
+	const line = d3
+		.line()
+		.x((d) => x(d.date))
+		.y((d) => y(d.value))
+		.curve(d3.curveLinear);
 
-    svg.append("path")
-        .datum(data)
-        .attr("class", "line usd-purchasing-power-line")
-        .attr("fill", "none")
-        .attr("stroke", "#FFFFFF") // Changed to white for visibility
-        .attr("stroke-width", window.innerWidth <= 400 ? 10 : window.innerWidth <= 600 ? 8 : 3)
-        .attr("d", line);
+	svg.append("path")
+		.datum(data)
+		.attr("class", "line usd-purchasing-power-line")
+		.attr("fill", "none")
+		.attr("stroke", "#FFFFFF") // Changed to white for visibility
+		.attr("stroke-width", window.innerWidth <= 400 ? 10 : window.innerWidth <= 600 ? 8 : 3)
+		.attr("d", line);
 
-    // Title
-    svg.append("text")
-        .attr("x", internalWidth / 2)
-        .attr(
-            "y",
-            window.innerWidth <= 400 ? 30 : window.innerWidth <= 600 ? 25 : 20
-        )
-        .attr("text-anchor", "middle")
-        .style("font-weight", "bold")
-        .text("DOLLAR PURCHASING POWER (CPI)");
+	// Title
+	svg.append("text")
+		.attr("x", internalWidth / 2)
+		.attr(
+			"y",
+			window.innerWidth <= 400 ? 30 : window.innerWidth <= 600 ? 25 : 20
+		)
+		.attr("text-anchor", "middle")
+		.style("font-weight", "bold")
+		.text("DOLLAR PURCHASING POWER (CPI)");
 }
 
 // Function to draw relative growth chart with improved logarithmic scaling
@@ -610,7 +795,8 @@ function drawRelativeGrowthChart(
 
 // Export object for easy access
 const chart_drawing = {
-    drawCombinedChart,
-    drawDollarPurchasingPowerChart,
-    drawRelativeGrowthChart
+	drawCombinedChart,
+	drawDollarPurchasingPowerChart,
+	drawRelativeGrowthChart,
+	halvingDraw
 };
