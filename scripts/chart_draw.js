@@ -1,3 +1,6 @@
+// scripts/chart_draw.js
+// All chart drawing functions for DEBASE
+
 // Draw Bitcoin Halving Chart with vertical lines and shaded regions - CORRIGIDO
 function halvingDraw({
 	divId = 'halving-chart',
@@ -10,73 +13,84 @@ function halvingDraw({
 	const chartDiv = document.getElementById(divId);
 	if (!chartDiv) return;
 	
+	// Ensure the chart div is responsive
 	chartDiv.style.height = height + 'px';
 	chartDiv.style.width = '100%';
 	
-	const margin = {top: 40, right: 30, bottom: 60, left: 60};
+	// Define margins for the chart
+	const margin = {top: 70, right: 30, bottom: 60, left: 60}; // Increased top margin for title space
+	
+	// Convert Unix timestamps to Date objects for halving events
 	const halvings = halvingTimestamps.map(ts => new Date(ts * 1000));
 	
-	// X scale: from first halving - 600 days to next halving + 600 days
+	// Determine the domain for the X-axis (time scale)
+	// Starts 600 days before the first halving and ends 600 days after the next halving
 	const minDate = new Date(halvings[0].getTime() - 600 * 24 * 3600 * 1000);
 	const maxDate = new Date(nextHalving.getTime() + 600 * 24 * 3600 * 1000);
+	
+	// Create the X-axis scale
 	const x = d3.scaleTime()
 		.domain([minDate, maxDate])
 		.range([margin.left, width - margin.right]);
 	
-	// Limpar conteúdo anterior
+	// Clear any previous content in the chart div
 	d3.select(`#${divId}`).selectAll('*').remove();
 	
-	// Criar SVG
+	// Create the main SVG container for the chart
 	const svg = d3.select(`#${divId}`)
 		.append('svg')
 		.attr('width', width)
 		.attr('height', height);
 	
-	// Primeiro desenhar as áreas coloridas (fundo)
+	// Draw shaded background areas for periods around each halving
 	halvings.forEach((halving, i) => {
+		// Define the start and end dates for the shaded regions
 		const beforeStart = new Date(halving.getTime() - 500 * 24 * 3600 * 1000);
 		const afterEnd = new Date(halving.getTime() + 500 * 24 * 3600 * 1000);
 		
-		// Área antes do halving (azul claro)
+		// Shaded area before the halving (light blue)
 		svg.append('rect')
-			.attr('x', Math.max(margin.left, x(beforeStart)))
+			.attr('x', Math.max(margin.left, x(beforeStart))) // Ensure it doesn't go beyond left margin
 			.attr('y', margin.top)
 			.attr('width', Math.max(0, x(halving) - Math.max(margin.left, x(beforeStart))))
 			.attr('height', height - margin.top - margin.bottom)
 			.attr('fill', '#e0f7fa')
 			.attr('opacity', 0.15);
 		
-		// Área após o halving (laranja claro)
+		// Shaded area after the halving (light orange)
 		svg.append('rect')
 			.attr('x', x(halving))
 			.attr('y', margin.top)
-			.attr('width', Math.max(0, Math.min(width - margin.right, x(afterEnd)) - x(halving)))
+			.attr('width', Math.max(0, Math.min(width - margin.right, x(afterEnd)) - x(halving))) // Ensure it doesn't go beyond right margin
 			.attr('height', height - margin.top - margin.bottom)
 			.attr('fill', '#ffe0b2')
 			.attr('opacity', 0.15);
 	});
 	
-	// Desenhar linha do preço do BTC se fornecida
+	// Draw the Bitcoin price line if data is provided
 	if (btcData && btcData.timestamp && btcData.price && btcData.timestamp.length > 0) {
-		// Filtrar dados dentro do range do gráfico
+		// Map and filter BTC data to only include points within the chart's X-axis domain
 		const filteredData = btcData.timestamp
-			.map((date, i) => ({date, price: btcData.price[i]}))
-			.filter(d => d.date >= minDate && d.date <= maxDate && d.price > 0);
+			.map((date, i) => ({date: new Date(date), price: btcData.price[i]})) // Convert timestamp to Date object
+			.filter(d => d.date >= minDate && d.date <= maxDate && d.price > 0); // Filter valid dates and positive prices
 		
 		if (filteredData.length > 0) {
-			// Y scale para preço BTC (logarítmica)
-			const minPrice = Math.max(0.01, d3.min(filteredData, d => d.price));
-			const maxPrice = d3.max(filteredData, d => d.price);
+			// Create Y-axis scale for BTC price (logarithmic, reverted for better visualization)
+			const minPrice = Math.max(0.01, d3.min(filteredData, d => d.price)); // Ensure minPrice is not zero for log scale
+			let maxPrice = d3.max(filteredData, d => d.price);
+			// Increase the maxPrice by a factor to create more space at the top
+			maxPrice = maxPrice * 2.0; // Adjust this multiplier as needed
 			const btcY = d3.scaleLog()
 				.domain([minPrice, maxPrice])
 				.range([height - margin.bottom, margin.top]);
 			
-			// Linha principal do BTC (laranja)
+			// Define the line generator for the BTC price
 			const btcLine = d3.line()
 				.x(d => x(d.date))
 				.y(d => btcY(d.price))
-				.curve(d3.curveMonotoneX);
+				.curve(d3.curveMonotoneX); // Smooth the line
 			
+			// Draw the main BTC price line (orange)
 			svg.append('path')
 				.datum(filteredData)
 				.attr('fill', 'none')
@@ -84,9 +98,9 @@ function halvingDraw({
 				.attr('stroke-width', 2)
 				.attr('d', btcLine);
 			
-			// Desenhar linhas coloridas para períodos específicos
+			// Draw colored lines for specific periods around halvings (500 days before/after)
 			halvings.forEach((halving, i) => {
-				// 500 dias antes do halving (azul)
+				// Period 500 days before the halving (blue line)
 				const beforeStart = new Date(halving.getTime() - 500 * 24 * 3600 * 1000);
 				const beforeData = filteredData.filter(d => d.date >= beforeStart && d.date <= halving);
 				
@@ -94,12 +108,12 @@ function halvingDraw({
 					svg.append('path')
 						.datum(beforeData)
 						.attr('fill', 'none')
-						.attr('stroke', '#1976d2')
+						.attr('stroke', '#1976d2') // Blue color
 						.attr('stroke-width', 3)
 						.attr('d', btcLine);
 				}
 				
-				// 500 dias após o halving (verde)
+				// Period 500 days after the halving (green line)
 				const afterEnd = new Date(halving.getTime() + 500 * 24 * 3600 * 1000);
 				const afterData = filteredData.filter(d => d.date >= halving && d.date <= afterEnd);
 				
@@ -107,84 +121,87 @@ function halvingDraw({
 					svg.append('path')
 						.datum(afterData)
 						.attr('fill', 'none')
-						.attr('stroke', '#388e3c')
+						.attr('stroke', '#388e3c') // Green color
 						.attr('stroke-width', 3)
 						.attr('d', btcLine);
 				}
 			});
 			
-			// Adicionar eixo Y para preço BTC
+			// Add Y-axis for BTC price
 			svg.append('g')
 				.attr('transform', `translate(${margin.left}, 0)`)
-				.call(d3.axisLeft(btcY).tickFormat(d => `$${d}`));
+				.call(d3.axisLeft(btcY)
+					.ticks(5) // Reduced number of ticks for cleaner look
+					.tickFormat(d => `$${d3.format(".2s")(d)}`)); // Format ticks for better readability (e.g., $10K, $1M)
 			
-			// Label do eixo Y
+			// Label for the Y-axis
 			svg.append('text')
 				.attr('transform', 'rotate(-90)')
 				.attr('y', margin.left - 50)
 				.attr('x', 0 - height / 2)
-				.attr('dy', '1em')
+				.attr('dy', '-1em')
 				.style('text-anchor', 'middle')
 				.style('fill', '#f7931a')
-				.text('BTC Price (USD, log scale)');
+				.text('BTC Price (USD, log scale)'); // Updated label to reflect log scale
 		}
 	}
 	
-	// Desenhar linhas verticais dos halvings
+	// Draw vertical lines for each past halving event
 	halvings.forEach((halving, i) => {
 		svg.append('line')
 			.attr('x1', x(halving))
 			.attr('x2', x(halving))
 			.attr('y1', margin.top)
 			.attr('y2', height - margin.bottom)
-			.attr('stroke', '#d32f2f')
+			.attr('stroke', '#d32f2f') // Red color
 			.attr('stroke-width', 2);
 		
-		// Labels dos halvings
+		// Add labels for each halving event
 		svg.append('text')
 			.attr('x', x(halving))
-			.attr('y', margin.top - 10)
+			.attr('y', margin.top + 5) // Moved labels lower for more space
 			.attr('text-anchor', 'middle')
 			.attr('fill', '#d32f2f')
 			.style('font-size', '0.8em')
 			.text(`Halving ${i + 1}`);
 	});
 	
-	// Desenhar linha vertical para próximo halving
+	// Draw vertical dashed line for the next halving event
 	if (nextHalving) {
 		svg.append('line')
 			.attr('x1', x(nextHalving))
 			.attr('x2', x(nextHalving))
 			.attr('y1', margin.top)
 			.attr('y2', height - margin.bottom)
-			.attr('stroke', '#1976d2')
+			.attr('stroke', '#1976d2') // Blue color
 			.attr('stroke-width', 2)
-			.attr('stroke-dasharray', '4,2');
+			.attr('stroke-dasharray', '4,2'); // Dashed line
 		
+		// Add label for the next halving
 		svg.append('text')
 			.attr('x', x(nextHalving))
-			.attr('y', margin.top - 10)
+			.attr('y', margin.top + 5) // Moved labels lower for more space
 			.attr('text-anchor', 'middle')
 			.attr('fill', '#1976d2')
 			.style('font-size', '0.8em')
 			.text('Next Halving');
 	}
 	
-	// Adicionar eixo X (tempo)
+	// Add X-axis (time axis)
 	svg.append('g')
 		.attr('transform', `translate(0, ${height - margin.bottom})`)
-		.call(d3.axisBottom(x).tickFormat(d3.timeFormat('%Y')));
+		.call(d3.axisBottom(x).tickFormat(d3.timeFormat('%Y'))); // Format ticks to show only the year
 	
-	// Título do gráfico
+	// Add chart title
 	svg.append('text')
 		.attr('x', width / 2)
-		.attr('y', margin.top - 20)
+		.attr('y', margin.top - 40) // Moved title higher for more space
 		.attr('text-anchor', 'middle')
-		.text('Bitcoin Halvings')
-		.style('font-weight', 'bold');
+		.text('Bitcoin Halvings and Price Cycles') // More descriptive title
+		.style('font-weight', 'bold')
+		.style('font-size', '1.2em');
 }
-// scripts/chart_draw.js
-// All chart drawing functions for DEBASE
+
 
 // Draw a brutalist D3 line chart - CSS-driven, mobile-first, NO DOTS
 // Modified to accept an array of data objects for multiple lines
