@@ -31,6 +31,10 @@
 
     <!-- Dollar Purchasing Power Chart -->
     <section style="margin-bottom: 1em;">
+        <div id="usd-purchasing-power-chart" class="brutalist-chart"></div>
+        <div class="ath-display">
+            <p><strong>Purchasing power is always relative to the starting date (1971).</strong></p>
+        </div>
         <p><strong>Dollar Purchasing Power (CPI):</strong> This chart shows the decline in the purchasing power of the
             US dollar over time, as measured by the Consumer Price Index (CPI). The line represents
             <code>1 / (accumulated inflation multiplier)</code> since 1971. As inflation accumulates, the value of the
@@ -38,101 +42,110 @@
             the start.
         </p>
     </section>
-    <div id="usd-purchasing-power-chart" class="brutalist-chart"></div>
-    <div class="ath-display">
-        <p><strong>Purchasing power is always relative to the starting date (1971).</strong></p>
-    </div>
     <br>
 
     <!-- Gold Chart -->
     <section style="margin-bottom: 1em;">
+        <div id="gold-chart" class="brutalist-chart"></div>
+        <div class="ath-display">
+            <p><strong>Gold ATH Normal:</strong> <span id="gold-ath-normal"></span></p>
+            <p><strong>Gold ATH Adjusted (Fixed):</strong> <span id="gold-ath-inflation-fixed"></span></p>
+            <p><strong>Gold ATH Adjusted (1971):</strong> <span id="gold-ath-inflation-1971"></span></p>
+        </div>
         <p><strong>Gold Price Chart:</strong> Shows the price of gold in USD, both in nominal terms and adjusted for
             inflation. The "Fixed" line adjusts for inflation using the CPI from the start of the gold dataset, while
             the "1971" line adjusts from the year 1971. This helps visualize gold's real purchasing power over time.</p>
     </section>
-    <div id="gold-chart" class="brutalist-chart"></div>
-    <div class="ath-display">
-        <p><strong>Gold ATH Normal:</strong> <span id="gold-ath-normal"></span></p>
-        <p><strong>Gold ATH Adjusted (Fixed):</strong> <span id="gold-ath-inflation-fixed"></span></p>
-        <p><strong>Gold ATH Adjusted (1971):</strong> <span id="gold-ath-inflation-1971"></span></p>
-    </div>
     <br>
 
     <!-- ETH Chart -->
     <section style="margin-bottom: 1em;">
+        <div id="eth-chart" class="brutalist-chart"></div>
+        <div class="ath-display">
+            <p><strong>ETH ATH Normal:</strong> <span id="eth-ath-normal"></span></p>
+            <p><strong>ETH ATH Adjusted (Fixed):</strong> <span id="eth-ath-inflation-fixed"></span></p>
+            <p><strong>ETH ATH Adjusted (1971):</strong> <span id="eth-ath-inflation-1971"></span></p>
+        </div>
         <p><strong>Ethereum Price Chart:</strong> Plots ETH price in USD, both nominal and inflation-adjusted. The
             "Fixed" line uses inflation adjustment from ETH's launch date, while the "1971" line uses the multiplier
             from 1971. This shows how ETH's value compares to the changing value of money.</p>
     </section>
-    <div id="eth-chart" class="brutalist-chart"></div>
-    <div class="ath-display">
-        <p><strong>ETH ATH Normal:</strong> <span id="eth-ath-normal"></span></p>
-        <p><strong>ETH ATH Adjusted (Fixed):</strong> <span id="eth-ath-inflation-fixed"></span></p>
-        <p><strong>ETH ATH Adjusted (1971):</strong> <span id="eth-ath-inflation-1971"></span></p>
-    </div>
     <br>
 
     <!-- Bitcoin Chart -->
     <section style="margin-bottom: 1em;">
+        <div id="btc-chart" class="brutalist-chart"></div>
+        <div class="ath-display">
+            <p><strong>BTC ATH Normal:</strong> <span id="btc-ath-normal"></span></p>
+            <p><strong>BTC ATH Adjusted (Fixed):</strong> <span id="btc-ath-inflation-fixed"></span></p>
+            <p><strong>BTC ATH Adjusted (1971):</strong> <span id="btc-ath-inflation-1971"></span></p>
+        </div>
         <p><strong>Bitcoin Price Chart:</strong> Plots BTC price in USD, both nominal and inflation-adjusted. The
             "Fixed" line uses inflation adjustment from BTC's launch date, while the "1971" line uses the multiplier
             from 1971. This helps compare Bitcoin's real growth to the effects of inflation.</p>
     </section>
-    <div id="btc-chart" class="brutalist-chart"></div>
-    <div class="ath-display">
-        <p><strong>BTC ATH Normal:</strong> <span id="btc-ath-normal"></span></p>
-        <p><strong>BTC ATH Adjusted (Fixed):</strong> <span id="btc-ath-inflation-fixed"></span></p>
-        <p><strong>BTC ATH Adjusted (1971):</strong> <span id="btc-ath-inflation-1971"></span></p>
-    </div>
     <br>
 
     <!-- XMR Chart -->
     <section style="margin-bottom: 1em;">
+        <div id="xmr-chart" class="brutalist-chart"></div>
+        <div class="ath-display">
+            <p><strong>XMR ATH Normal:</strong> <span id="xmr-ath-normal"></span></p>
+            <p><strong>XMR ATH Adjusted (Fixed):</strong> <span id="xmr-ath-inflation-fixed"></span></p>
+            <p><strong>XMR ATH Adjusted (1971):</strong> <span id="xmr-ath-inflation-1971"></span></p>
+        </div>
         <p><strong>Monero Price Chart:</strong> Plots XMR price in USD, both nominal and inflation-adjusted. The "Fixed"
             line uses inflation adjustment from XMR's launch date, while the "1971" line uses the multiplier from 1971.
             This helps compare Monero's real growth to the effects of inflation.</p>
     </section>
-    <div id="xmr-chart" class="brutalist-chart"></div>
-    <div class="ath-display">
-        <p><strong>XMR ATH Normal:</strong> <span id="xmr-ath-normal"></span></p>
-        <p><strong>XMR ATH Adjusted (Fixed):</strong> <span id="xmr-ath-inflation-fixed"></span></p>
-        <p><strong>XMR ATH Adjusted (1971):</strong> <span id="xmr-ath-inflation-1971"></span></p>
-    </div>
     <br>
 
     <!-- Gold-Adjusted Crypto Chart -->
     <section style="margin-bottom: 1em;">
+        <div id="gold-adjusted-crypto-chart" class="brutalist-chart"></div>
+        <div class="ath-display">
+            <p><strong>ETH/Gold ATH:</strong> <span id="eth-gold-ath"></span></p>
+            <p><strong>BTC/Gold ATH:</strong> <span id="btc-gold-ath"></span></p>
+            <p><strong>XMR/Gold ATH:</strong> <span id="xmr-gold-ath"></span></p>
+        </div>
         <p><strong>Crypto Priced in Gold:</strong> These lines show the value of ETH, BTC, and XMR measured in ounces of
             gold, not dollars. This helps compare crypto performance to gold, a traditional store of value, and see
             which asset outperformed the other over time.</p>
     </section>
-    <div id="gold-adjusted-crypto-chart" class="brutalist-chart"></div>
-    <div class="ath-display">
-        <p><strong>ETH/Gold ATH:</strong> <span id="eth-gold-ath"></span></p>
-        <p><strong>BTC/Gold ATH:</strong> <span id="btc-gold-ath"></span></p>
-        <p><strong>XMR/Gold ATH:</strong> <span id="xmr-gold-ath"></span></p>
-    </div>
     <br>
 
 
 
     <!-- Relative Price Ratio in USD Chart -->
     <section style="margin-bottom: 1em;">
+        <div id="crypto-relative-growth-usd-chart" class="brutalist-chart"></div>
+        <div class="ath-display">
+            <p><strong>Each line starts at 1.0 (its own first USD price).</strong></p>
+        </div>
         <p><strong>Relative Price Ratio (Comparison):</strong> This chart shows how each crypto asset (BTC, ETH, XMR)
             has changed relative to its own starting price in USD. Each line is normalized so its first price is
             1.0, and every point after shows the ratio of the current price to the initial price.<br><br>
-            <em>How to compare:</em> If one line is above another, it means that asset has performed better (in percentage
+            <em>How to compare:</em> If one line is above another, it means that asset has performed better (in
+            percentage
             terms) since its own launch, regardless of the initial price. For example, if BTC is at 10 and ETH is at
-            5, BTC is 10x its initial price and ETH is 5x. This lets you compare the relative performance and trajectory of each asset, even if they started at different times or prices.<br><br>
+            5, BTC is 10x its initial price and ETH is 5x. This lets you compare the relative performance and trajectory
+            of each asset, even if they started at different times or prices.<br><br>
             <strong>Note:</strong> The Y-axis uses a logarithmic scale to make it easier to compare ratios across
             assets that have changed by very different amounts.
         </p>
     </section>
-    <div id="crypto-relative-growth-usd-chart" class="brutalist-chart"></div>
-    <div class="ath-display">
-        <p><strong>Each line starts at 1.0 (its own first USD price).</strong></p>
-    </div>
+
     <br>
+
+    <section style="margin-bottom:2em;">
+        <div id="halving-chart" class="brutalist-chart"></div>
+        <div id="next-halving" style="margin-top:2em;font-weight:bold;color:#ffb300;"></div>
+        <p><strong>Halvings and the 500-Day Strategy:</strong><br>
+            This chart shows the dates of Bitcoin halvings marked with vertical lines. The periods 500 days before and
+            after each halving are highlighted in different colors. The estimated date of the next halving is also
+            displayed. The idea is that buying during the 500 days leading up to a halving and holding until the end of
+            the 500 days after the halving is a potentially effective strategy.</p>
+    </section>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>
@@ -614,12 +627,54 @@
                     cssClass: "xmr-usd-rel-line"
                 }
             ];
-
             // Use the improved chart function
             chart_drawing.drawRelativeGrowthChart(
                 cryptoRelativeGrowthUsdChartData,
                 "crypto-relative-growth-usd-chart"
             );
+            // Read halving timestamps from halvings.txt
+            const halvingTimestamps = await fetch('datasets/halvings.txt')
+                .then(response => response.text())
+                .then(text => text
+                    .split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line && !isNaN(line))
+                    .map(Number)
+                );
+            const halvings = halvingTimestamps.map(ts => new Date(ts * 1000));
+            const lastHalving = halvings[halvings.length - 1];
+            const nextHalving = new Date(lastHalving.getTime() + 4 * 365.25 * 24 * 3600 * 1000);
+            document.getElementById('next-halving').textContent = `Estimated next halving: ${nextHalving.toLocaleDateString()}`;
+
+            const btcDataH = {
+                timestamp: [],
+                price: []
+            };
+            const infoBTCH = csvManager.getDatasetInfo('BTC');
+
+            csvManager.iterateRange(
+                'BTC',
+                infoBTCH.firstDate,
+                infoBTCH.lastDate,
+                (date, data) => {
+                    btcDataH.timestamp.push(new Date(date));
+                    btcDataH.price.push(data.Close);
+                }
+            );
+
+            console.log('BTC data loaded:', btcDataH);
+
+            // Use halvingDraw from chart_draw.js, now with BTC price line
+            chart_drawing.halvingDraw({
+                divId: 'halving-chart',
+                halvingTimestamps,
+                nextHalving,
+                width: document.getElementById('halving-chart').clientWidth || 800,
+                height: document.getElementById('halving-chart').clientHeight || 400,
+                btcData: btcDataH
+            });
+
+
         }
 
         // Run main when page loads
