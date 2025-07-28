@@ -1,0 +1,151 @@
+➜  debase git:(master) ✗ python3 scripts/SRS_stake.py
+
+--- 3-Month Period (Jan-Mar 2025) Analysis (2025-01-01 onwards) ---
+
+ETH Price on 2025-01-01: $3,360.40 USD
+Starting amount: 10 ETH ($33,603.99 USD)
+
+--- Monthly Breakdown ---
+
+SRS (4.5% APY):
+  End of Feb 2025: 10.037 ETH ($31,305.03 USD)
+  End of Mar 2025: 10.071 ETH ($22,310.23 USD)
+  End of Apr 2025: 10.109 ETH ($19,274.18 USD)
+
+ETH Stake (2.7% APY):
+  End of Feb 2025: 10.023 ETH ($31,258.87 USD)
+  End of Mar 2025: 10.043 ETH ($22,247.66 USD)
+  End of Apr 2025: 10.066 ETH ($19,191.78 USD)
+
+--- Final Summary (3-Month Period (Jan-Mar 2025)) ---
+
+Final ETH Price: $1,906.61 USD (vs $3,360.40 start)
+ETH Price Change: -43.3%
+
+SRS (4.5% APY):
+  Final amount: 10.109 ETH ($19,274.18 USD)
+  Yield: 0.109 ETH ($-14,329.80 USD)
+
+ETH Stake (2.7% APY + ETH Price Change):
+  Final amount: 10.066 ETH ($19,191.78 USD)
+  Yield: 0.066 ETH ($-14,412.20 USD)
+
+--- 1-Year Period (Jun 2024 - May 2025) Analysis (2024-06-01 onwards) ---
+
+ETH Price on 2024-06-01: $3,785.17 USD
+Starting amount: 10 ETH ($37,851.74 USD)
+
+--- Monthly Breakdown ---
+
+SRS (4.5% APY):
+  End of Jul 2024: 10.036 ETH ($34,715.00 USD)
+  End of Aug 2024: 10.074 ETH ($32,306.04 USD)
+  End of Sep 2024: 10.112 ETH ($24,580.37 USD)
+  End of Oct 2024: 10.148 ETH ($24,917.51 USD)
+  End of Nov 2024: 10.186 ETH ($25,606.48 USD)
+  End of Dec 2024: 10.223 ETH ($37,856.87 USD)
+  End of Jan 2025: 10.261 ETH ($34,482.50 USD)
+  End of Feb 2025: 10.300 ETH ($32,123.44 USD)
+  End of Mar 2025: 10.335 ETH ($22,893.49 USD)
+  End of Apr 2025: 10.373 ETH ($19,778.07 USD)
+  End of May 2025: 10.411 ETH ($19,127.36 USD)
+  End of Jun 2025: 10.450 ETH ($26,503.16 USD)
+
+ETH Stake (2.7% APY):
+  End of Jul 2024: 10.022 ETH ($34,665.46 USD)
+  End of Aug 2024: 10.045 ETH ($32,212.37 USD)
+  End of Sep 2024: 10.067 ETH ($24,472.96 USD)
+  End of Oct 2024: 10.089 ETH ($24,773.22 USD)
+  End of Nov 2024: 10.112 ETH ($25,420.66 USD)
+  End of Dec 2024: 10.134 ETH ($37,528.52 USD)
+  End of Jan 2025: 10.157 ETH ($34,133.01 USD)
+  End of Feb 2025: 10.180 ETH ($31,750.97 USD)
+  End of Mar 2025: 10.201 ETH ($22,597.90 USD)
+  End of Apr 2025: 10.224 ETH ($19,493.92 USD)
+  End of May 2025: 10.247 ETH ($18,825.65 USD)
+  End of Jun 2025: 10.270 ETH ($26,046.65 USD)
+
+--- Final Summary (1-Year Period (Jun 2024 - May 2025)) ---
+
+Final ETH Price: $2,536.19 USD (vs $3,785.17 start)
+ETH Price Change: -33.0%
+
+SRS (4.5% APY):
+  Final amount: 10.450 ETH ($26,503.16 USD)
+  Yield: 0.450 ETH ($-11,348.58 USD)
+
+ETH Stake (2.7% APY + ETH Price Change):
+  Final amount: 10.270 ETH ($26,046.65 USD)
+  Yield: 0.270 ETH ($-11,805.09 USD)
+
+--- 2-Year Period (Jun 2023 - May 2025) Analysis (2023-06-01 onwards) ---
+
+ETH Price on 2023-06-01: $1,863.21 USD
+Starting amount: 10 ETH ($18,632.06 USD)
+
+--- Monthly Breakdown ---
+
+SRS (4.5% APY):
+  End of Jul 2023: 10.036 ETH ($19,256.74 USD)
+  End of Aug 2023: 10.074 ETH ($18,832.25 USD)
+  End of Sep 2023: 10.112 ETH ($16,504.77 USD)
+  End of Oct 2023: 10.148 ETH ($17,300.39 USD)
+  End of Nov 2023: 10.186 ETH ($18,824.66 USD)
+  End of Dec 2023: 10.223 ETH ($21,347.37 USD)
+  End of Jan 2024: 10.261 ETH ($24,265.56 USD)
+  End of Feb 2024: 10.300 ETH ($23,790.49 USD)
+  End of Feb 2024: 10.335 ETH ($34,646.36 USD)
+  End of Mar 2024: 10.373 ETH ($37,900.81 USD)
+  End of Apr 2024: 10.411 ETH ($31,498.04 USD)
+  End of May 2024: 10.450 ETH ($39,239.43 USD)
+  End of Jun 2024: 10.488 ETH ($36,291.67 USD)
+  End of Jul 2024: 10.527 ETH ($34,095.91 USD)
+  End of Aug 2024: 10.567 ETH ($26,571.36 USD)
+  End of Sep 2024: 10.605 ETH ($27,542.89 USD)
+  End of Oct 2024: 10.645 ETH ($26,799.04 USD)
+  End of Nov 2024: 10.683 ETH ($39,568.50 USD)
+  End of Dec 2024: 10.723 ETH ($35,808.38 USD)
+  End of Jan 2025: 10.763 ETH ($35,515.70 USD)
+  End of Feb 2025: 10.800 ETH ($24,168.58 USD)
+  End of Mar 2025: 10.840 ETH ($19,768.92 USD)
+  End of Apr 2025: 10.880 ETH ($19,497.89 USD)
+  End of May 2025: 10.920 ETH ($27,622.58 USD)
+
+ETH Stake (2.7% APY):
+  End of Jul 2023: 10.022 ETH ($19,229.26 USD)
+  End of Aug 2023: 10.045 ETH ($18,777.64 USD)
+  End of Sep 2023: 10.067 ETH ($16,432.64 USD)
+  End of Oct 2023: 10.089 ETH ($17,200.21 USD)
+  End of Nov 2023: 10.112 ETH ($18,688.05 USD)
+  End of Dec 2023: 10.134 ETH ($21,162.21 USD)
+  End of Jan 2024: 10.157 ETH ($24,019.63 USD)
+  End of Feb 2024: 10.180 ETH ($23,514.64 USD)
+  End of Feb 2024: 10.201 ETH ($34,199.02 USD)
+  End of Mar 2024: 10.224 ETH ($37,356.29 USD)
+  End of Apr 2024: 10.247 ETH ($31,001.20 USD)
+  End of May 2024: 10.270 ETH ($38,563.54 USD)
+  End of Jun 2024: 10.293 ETH ($35,615.65 USD)
+  End of Jul 2024: 10.316 ETH ($33,411.45 USD)
+  End of Aug 2024: 10.339 ETH ($25,999.56 USD)
+  End of Sep 2024: 10.362 ETH ($26,911.72 USD)
+  End of Oct 2024: 10.385 ETH ($26,146.31 USD)
+  End of Nov 2024: 10.408 ETH ($38,549.65 USD)
+  End of Dec 2024: 10.432 ETH ($34,834.91 USD)
+  End of Jan 2025: 10.455 ETH ($34,499.24 USD)
+  End of Feb 2025: 10.477 ETH ($23,445.61 USD)
+  End of Mar 2025: 10.500 ETH ($19,149.27 USD)
+  End of Apr 2025: 10.523 ETH ($18,859.79 USD)
+  End of May 2025: 10.547 ETH ($26,679.19 USD)
+
+--- Final Summary (2-Year Period (Jun 2023 - May 2025)) ---
+
+Final ETH Price: $2,529.48 USD (vs $1,863.21 start)
+ETH Price Change: +35.8%
+
+SRS (4.5% APY):
+  Final amount: 10.920 ETH ($27,622.58 USD)
+  Yield: 0.920 ETH ($8,990.52 USD)
+
+ETH Stake (2.7% APY + ETH Price Change):
+  Final amount: 10.547 ETH ($26,679.19 USD)
+  Yield: 0.547 ETH ($8,047.13 USD)
