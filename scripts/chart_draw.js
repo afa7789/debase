@@ -556,7 +556,8 @@ function drawDollarPurchasingPowerChart(purchasingPowerData) {
 // Function to draw relative growth chart with improved logarithmic scaling
 function drawRelativeGrowthChart(
 	dataSets,
-	divId = "crypto-relative-growth-usd-chart"
+	divId = "crypto-relative-growth-usd-chart",
+	title = "CRYPTO RELATIVE GROWTH IN USD",
 ) {
 	const chartDiv = document.getElementById(divId);
 	if (!chartDiv) {
@@ -755,7 +756,7 @@ function drawRelativeGrowthChart(
 		)
 		.attr("text-anchor", "middle")
 		.style("font-weight", "bold")
-		.text("CRYPTO RELATIVE GROWTH IN USD");
+		.text(title);
 
 	// Add Legend
 	const legend = svg

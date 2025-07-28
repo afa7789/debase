@@ -128,8 +128,6 @@
     </section>
     <br>
 
-
-
     <!-- Relative Price Ratio in USD Chart -->
     <section style="margin-bottom: 1em;">
         <div id="crypto-relative-growth-usd-chart" class="brutalist-chart"></div>
@@ -148,7 +146,20 @@
             assets that have changed by very different amounts.
         </p>
     </section>
+    <br>
 
+
+    <!-- Relative Price Ratio in USD Chart for Gold and Silver -->
+    <section style="margin-bottom: 1em;">
+        <div id="gold-silver-relative-growth-chart" class="brutalist-chart"></div>
+        <div class="ath-display">
+            <p><strong>Each line starts at 1.0 (its own first USD price, since 2000).</strong></p>
+        </div>
+        <p><strong>Relative Price Ratio (Comparison):</strong> This chart shows how gold and silver have changed relative to their own starting price in USD (from the year 2000). Each line is normalized so its first price is 1.0, and every point after shows the ratio of the current price to the initial price.<br><br>
+            <em>How to compare:</em> If one line is above another, it means that asset has performed better (in percentage terms) since 2000, regardless of the initial price. For example, if gold is at 8 and silver is at 4, gold is 8x its initial price and silver is 4x. This lets you compare the relative performance and trajectory of each metal, even though they started at different prices.<br><br>
+            <strong>Note:</strong> The Y-axis uses a logarithmic scale to make it easier to compare ratios across assets that have changed by very different amounts.
+        </p>
+    </section>
     <br>
 
     <section style="margin-bottom:2em;">
@@ -477,6 +488,26 @@
             return { sliceRangeCPI_U: assetSliceRangeCPI_U, multiplierFor1971: fromBigInt(assetMultiplierFor1971) };
         }
 
+        function filterDataFromDate(data, startDate) {
+            const startDateObj = new Date(startDate);
+            const filteredTimestamps = [];
+            const filteredPrices = [];
+            
+            for (let i = 0; i < data.timestamp.length; i++) {
+                const currentDate = new Date(data.timestamp[i]);
+                if (currentDate >= startDateObj) {
+                    filteredTimestamps.push(data.timestamp[i]);
+                    filteredPrices.push(data.price[i]);
+                }
+            }
+            
+            return {
+                timestamp: filteredTimestamps,
+                price: filteredPrices
+            };
+        }
+
+
         // Main application logic
         async function main() {
             console.log("Accessing global csvManager object:", csvManager);
@@ -662,6 +693,34 @@
                 cryptoRelativeGrowthUsdChartData,
                 "crypto-relative-growth-usd-chart"
             );
+
+            const goldFrom2000 = filterDataFromDate(goldData.normal, '2000-01-01');
+            const silverFrom2000 = filterDataFromDate(silverData.normal, '2000-01-01');
+
+            const goldUsdRelative = normalizeUsdSeriesFromOwnStart(goldFrom2000, "GOLD");
+            const silverUsdRelative = normalizeUsdSeriesFromOwnStart(silverFrom2000, "SILVER");
+
+            const goldSilverRelativeGrowthChartData = [
+                {
+                    data: goldUsdRelative,
+                    label: "GOLD (Relative Price Ratio)",
+                    color: "#ffd700", // Gold color
+                    cssClass: "gold-usd-rel-line"
+                },
+                {
+                    data: silverUsdRelative,
+                    label: "SILVER (Relative Price Ratio)",
+                    color: "#c0c0c0", // Silver color
+                    cssClass: "silver-usd-rel-line"
+                }
+            ];
+
+            chart_drawing.drawRelativeGrowthChart(
+                goldSilverRelativeGrowthChartData,
+                "gold-silver-relative-growth-chart",
+                "Gold and Silver Relative Growth (from 2000)"
+            );
+
             // Read halving timestamps from halvings.txt
             const halvingTimestamps = await fetch('datasets/halvings.txt')
                 .then(response => response.text())
