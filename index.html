@@ -58,6 +58,20 @@
     </section>
     <br>
 
+    <!-- Silver Chart -->
+    <section style="margin-bottom: 1em;">
+        <div id="silver-chart" class="brutalist-chart"></div>
+        <div class="ath-display">
+            <p><strong>Silver ATH Normal:</strong> <span id="silver-ath-normal"></span></p>
+            <p><strong>Silver ATH Adjusted (Fixed):</strong> <span id="silver-ath-inflation-fixed"></span></p>
+            <p><strong>Silver ATH Adjusted (1971):</strong> <span id="silver-ath-inflation-1971"></span></p>
+        </div>
+        <p><strong>Silver Price Chart:</strong> Shows the price of silver in USD, both in nominal terms and adjusted for
+            inflation. The "Fixed" line adjusts for inflation using the CPI from the start of the silver dataset, while
+            the "1971" line adjusts from the year 1971. This helps visualize silver's real purchasing power over time.</p>
+    </section>
+    <br>
+
     <!-- ETH Chart -->
     <section style="margin-bottom: 1em;">
         <div id="eth-chart" class="brutalist-chart"></div>
@@ -472,10 +486,12 @@
             const XMR = "XMR";
             const ETH = "ETH";
             const BTC = "BTC";
+            const SILVER = "SILVER";
 
             const datasetConfigs = [
                 { name: CPI_U, csvPath: 'datasets/daily_cpi_inflation.csv', fetchFunction: fetchCpiUData },
                 { name: GOLD, csvPath: 'datasets/gold.csv', fetchFunction: fetchGoldData },
+                { name: SILVER, csvPath: 'datasets/silver.csv', fetchFunction: null },
                 { name: XMR, csvPath: 'datasets/monero_2014-05-21_2025-07-25.csv', fetchFunction: fetchXmrData },
                 { name: ETH, csvPath: 'datasets/ethereum_2015-08-07_2025-07-25.csv', fetchFunction: fetchEthData },
                 { name: BTC, csvPath: 'datasets/bitcoin_2010-07-17_2025-07-25.csv', fetchFunction: fetchBtcData },
@@ -538,6 +554,20 @@
                 { data: goldData.inflation1971, label: "Gold Inflation Adjusted (1971)", color: "green", cssClass: "inflation-1971-line" }
             ];
             chart_drawing.drawCombinedChart(goldChartData, "gold-chart", "Gold Price", "USD $");
+
+            // --- Process Silver data ---
+            const infoSILVER = csvManager.getDatasetInfo(SILVER);
+            const silverInflationParams = getAssetInflationParams(infoSILVER, fullCpiUData, cpiUFirstDate);
+            const silverData = processAssetWithInflation(SILVER, silverInflationParams.sliceRangeCPI_U, silverInflationParams.multiplierFor1971);
+            document.getElementById('silver-ath-normal').textContent = `$${silverData.normal.ATH.toFixed(2)}`;
+            document.getElementById('silver-ath-inflation-fixed').textContent = `$${silverData.inflationFixed.ATH.toFixed(2)}`;
+            document.getElementById('silver-ath-inflation-1971').textContent = `$${silverData.inflation1971.ATH.toFixed(2)}`;
+            const silverChartData = [
+                { data: silverData.normal, label: "Silver Price (Normal)", color: "silver", cssClass: "normal-silver-line" },
+                { data: silverData.inflationFixed, label: "Silver Inflation Adjusted (Fixed)", color: "blue", cssClass: "inflation-fixed-silver-line" },
+                { data: silverData.inflation1971, label: "Silver Inflation Adjusted (1971)", color: "green", cssClass: "inflation-1971-silver-line" }
+            ];
+            chart_drawing.drawCombinedChart(silverChartData, "silver-chart", "Silver Price", "USD $");
 
             // --- Process ETH data ---
             const infoETH = csvManager.getDatasetInfo(ETH);
