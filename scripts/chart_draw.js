@@ -657,11 +657,11 @@ function drawRelativeGrowthChart(
 			.range([internalHeight - margin.bottom, margin.top]);
 	}
 
-	// Grid lines
-	const numXTicks =
-		window.innerWidth <= 400 ? 3 : window.innerWidth <= 600 ? 4 : 6;
-	const numYTicks =
-		window.innerWidth <= 400 ? 4 : window.innerWidth <= 600 ? 5 : 6;
+
+	// Grid lines (reduced and lighter for clarity)
+	const numXTicks = window.innerWidth <= 400 ? 3 : window.innerWidth <= 600 ? 4 : 6;
+	// Fewer Y ticks for less clutter
+	const numYTicks = window.innerWidth <= 400 ? 3 : window.innerWidth <= 600 ? 4 : 5;
 
 	// X-axis grid
 	svg.append("g")
@@ -673,9 +673,12 @@ function drawRelativeGrowthChart(
 				.ticks(numXTicks)
 				.tickSize(-(internalHeight - margin.top - margin.bottom))
 				.tickFormat("")
-		);
+		)
+		.selectAll(".tick line")
+		.attr("stroke", "#ccc")
+		.attr("stroke-opacity", 0.15);
 
-	// Y-axis grid
+	// Y-axis grid (fewer and lighter)
 	svg.append("g")
 		.attr("class", "grid")
 		.attr("transform", `translate(${margin.left},0)`)
@@ -685,7 +688,10 @@ function drawRelativeGrowthChart(
 				.ticks(numYTicks)
 				.tickSize(-(internalWidth - margin.left - margin.right))
 				.tickFormat("")
-		);
+		)
+		.selectAll(".tick line")
+		.attr("stroke", "#ccc")
+		.attr("stroke-opacity", 0.15);
 
 	// X-axis
 	const xAxis = svg
@@ -700,13 +706,29 @@ function drawRelativeGrowthChart(
 			.style("text-anchor", "end");
 	}
 
-	// Y-axis with better formatting
-	const yAxis = svg
-		.append("g")
-		.attr("transform", `translate(${margin.left},0)`)
-		.call(
-			d3
-				.axisLeft(y)
+	// Y-axis with fewer, more meaningful ticks for log scale
+	const yAxis = svg.append("g").attr("transform", `translate(${margin.left},0)`);
+	if (useLogScale) {
+		// Choose log steps: 0.5x, 1x, 2x, 5x, 10x, 20x, 50x, 100x, 200x, 500x, 1000x, etc., within domain
+		const logMin = Math.max(minPrice * 0.8, 0.1);
+		const logMax = maxPrice * 1.2;
+		// Build tick values array
+		let tickVals = [];
+		let steps = [0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000];
+		tickVals = steps.filter(v => v >= logMin && v <= logMax);
+		yAxis.call(
+			d3.axisLeft(y)
+				.tickValues(tickVals)
+				.tickFormat((d) => {
+					if (d >= 1000000) return `${(d / 1000000).toFixed(1)}M`;
+					if (d >= 1000) return `${(d / 1000).toFixed(1)}K`;
+					if (d >= 1) return `${d.toFixed(0)}x`;
+					return d.toFixed(2);
+				})
+		);
+	} else {
+		yAxis.call(
+			d3.axisLeft(y)
 				.ticks(numYTicks)
 				.tickFormat((d) => {
 					if (d >= 1000000) return `${(d / 1000000).toFixed(1)}M`;
@@ -715,6 +737,7 @@ function drawRelativeGrowthChart(
 					return d.toFixed(2);
 				})
 		);
+	}
 
 	// Y-axis label
 	svg.append("text")

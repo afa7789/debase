@@ -68,7 +68,8 @@
         </div>
         <p><strong>Silver Price Chart:</strong> Shows the price of silver in USD, both in nominal terms and adjusted for
             inflation. The "Fixed" line adjusts for inflation using the CPI from the start of the silver dataset, while
-            the "1971" line adjusts from the year 1971. This helps visualize silver's real purchasing power over time.</p>
+            the "1971" line adjusts from the year 1971. This helps visualize silver's real purchasing power over time.
+        </p>
     </section>
     <br>
 
@@ -148,17 +149,36 @@
     </section>
     <br>
 
-
     <!-- Relative Price Ratio in USD Chart for Gold and Silver -->
     <section style="margin-bottom: 1em;">
         <div id="gold-silver-relative-growth-chart" class="brutalist-chart"></div>
         <div class="ath-display">
             <p><strong>Each line starts at 1.0 (its own first USD price, since 2000).</strong></p>
         </div>
-        <p><strong>Relative Price Ratio (Comparison):</strong> This chart shows how gold and silver have changed relative to their own starting price in USD (from the year 2000). Each line is normalized so its first price is 1.0, and every point after shows the ratio of the current price to the initial price.<br><br>
-            <em>How to compare:</em> If one line is above another, it means that asset has performed better (in percentage terms) since 2000, regardless of the initial price. For example, if gold is at 8 and silver is at 4, gold is 8x its initial price and silver is 4x. This lets you compare the relative performance and trajectory of each metal, even though they started at different prices.<br><br>
-            <strong>Note:</strong> The Y-axis uses a logarithmic scale to make it easier to compare ratios across assets that have changed by very different amounts.
+        <p><strong>Relative Price Ratio (Comparison):</strong> This chart shows how gold and silver have changed
+            relative to their own starting price in USD (from the year 2000). Each line is normalized so its first price
+            is 1.0, and every point after shows the ratio of the current price to the initial price.<br><br>
+            <em>How to compare:</em> If one line is above another, it means that asset has performed better (in
+            percentage terms) since 2000, regardless of the initial price. For example, if gold is at 8 and silver is at
+            4, gold is 8x its initial price and silver is 4x. This lets you compare the relative performance and
+            trajectory of each metal, even though they started at different prices.<br><br>
+            <strong>Note:</strong> The Y-axis uses a logarithmic scale to make it easier to compare ratios across assets
+            that have changed by very different amounts.
         </p>
+    </section>
+    <br>
+
+    <!-- SRS vs ETH Stake Chart (Since July 2023) -->
+    <section style="margin-bottom: 1em;">
+        <div id="srs-eth-stake-relative-chart-full" class="brutalist-chart"></div>
+        <div class="ath-display">
+            <p><strong>Each line starts at 1.0 (its own first value, since July 2023).</strong></p>
+        </div>
+        <p><strong>SRS vs. Ethereum Stake (Since July 2023):</strong> This chart compares the simulated growth of Sky
+            Protocol MakerDAO Savings, called SRS (4.5% APY) with Ethereum staking (2.7% APY + ETH price appreciation), both
+            normalized to 1.0 at the start of the period. SRS offers a fixed yield, while ETH Stake combines staking
+            yield with ETH price changes. The chart starts in July 2023, when these strategies gained more market
+            attention.</p>
     </section>
     <br>
 
@@ -174,7 +194,6 @@
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>
-
 
     <script>
         // Wait for idb to be available and define wrapper functions
@@ -256,16 +275,21 @@
     </script>
 
     <script src="scripts/chart_draw.js"></script>
-
     <script src="scripts/dataset_manager.js"></script>
-
     <script src="scripts/import_from_kraken.js"></script>
-
     <script src="scripts/import_from_cpi.js"></script>
 
     <script>
         // The dates returned by csvManager.getFirstDate(GOLD) and csvManager.getFirstDate(CPI_U)
         // are strings in the format "YYYY-MM-DD,value1,value2,..."
+
+        // SRS and ETH Stake APY constants
+        const SRS_APY = 0.045; // 4.5% APY
+        const ETH_STAKE_APY = 0.027; // 2.7% APY
+
+        // Calculate daily multipliers
+        const srsDailyMultiplier = Math.pow(1 + SRS_APY, 1 / 365);
+        const ethStakeDailyMultiplier = Math.pow(1 + ETH_STAKE_APY, 1 / 365);
 
         // Function to calculate the difference in days between two dates in "YYYY-MM-DD" format
         function daysBetween(dateStr1, dateStr2) {
@@ -492,7 +516,7 @@
             const startDateObj = new Date(startDate);
             const filteredTimestamps = [];
             const filteredPrices = [];
-            
+
             for (let i = 0; i < data.timestamp.length; i++) {
                 const currentDate = new Date(data.timestamp[i]);
                 if (currentDate >= startDateObj) {
@@ -500,13 +524,65 @@
                     filteredPrices.push(data.price[i]);
                 }
             }
-            
+
             return {
                 timestamp: filteredTimestamps,
                 price: filteredPrices
             };
         }
 
+        // Function to generate simulated SRS and ETH Stake comparison data
+        function generateComparisonData(startDateStr, endDateStr, ethNormalData, srsDailyMultiplier, ethStakeDailyMultiplier) {
+            const startDate = new Date(startDateStr);
+            const endDate = new Date(endDateStr);
+
+            const srsSimulatedData = { timestamp: [], price: [] };
+            const ethStakeSimulatedData = { timestamp: [], price: [] };
+
+            let currentSrsValue = 1.0; // Start at 1.0 for normalization
+            let initialEthPrice = null;
+
+            // Create a map of ETH prices for quick access
+            const ethPriceMap = new Map();
+            ethNormalData.timestamp.forEach((ts, i) => {
+                ethPriceMap.set(ts, ethNormalData.price[i]);
+            });
+
+            for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+                const dateString = d.toISOString().split('T')[0]; // "YYYY-MM-DD"
+
+                const ethPriceToday = ethPriceMap.get(dateString);
+
+                if (ethPriceToday === undefined) {
+                    // If there is no ETH price for this date, skip
+                    continue;
+                }
+
+                if (initialEthPrice === null) {
+                    initialEthPrice = ethPriceToday;
+                }
+
+                // SRS simulation
+                currentSrsValue *= srsDailyMultiplier;
+                srsSimulatedData.timestamp.push(dateString);
+                srsSimulatedData.price.push(currentSrsValue);
+
+                // ETH Stake simulation with price appreciation/depreciation
+                // Formula: (ETH price today / initial ETH price) * (1 + APY_stake)^(days since start / 365)
+                // This assumes staking adds value to the base ETH price.
+                const daysSinceStart = (d.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
+                const ethStakeValue = (ethPriceToday / initialEthPrice) * Math.pow(1 + ETH_STAKE_APY, daysSinceStart / 365);
+
+                ethStakeSimulatedData.timestamp.push(dateString);
+                ethStakeSimulatedData.price.push(ethStakeValue);
+            }
+
+            // Normalize so both series start at 1.0
+            const normalizedSrs = normalizeUsdSeriesFromOwnStart(srsSimulatedData, "SRS Simulated");
+            const normalizedEthStake = normalizeUsdSeriesFromOwnStart(ethStakeSimulatedData, "ETH Stake Simulated");
+
+            return { srs: normalizedSrs, ethStake: normalizedEthStake };
+        }
 
         // Main application logic
         async function main() {
@@ -721,6 +797,39 @@
                 "Gold and Silver Relative Growth (from 2000)"
             );
 
+            // --- SRS vs ETH Stake Comparison Chart (Since July 2023) ---
+            const startDateJuly2023 = "2023-07-01";
+            const endDate = csvManager.getLastDate(ETH);
+
+            const comparisonData = generateComparisonData(
+                startDateJuly2023,
+                endDate,
+                ethData.normal,
+                srsDailyMultiplier,
+                ethStakeDailyMultiplier
+            );
+
+            const comparisonChartData = [
+                {
+                    data: comparisonData.srs,
+                    label: "SRS (Simulated 4.5% APY)",
+                    color: "#1a73e8",
+                    cssClass: "srs-simulated-line"
+                },
+                {
+                    data: comparisonData.ethStake,
+                    label: "Ethereum Stake (Simulated 2.7% APY + ETH Price)",
+                    color: "#6f2c91",
+                    cssClass: "eth-stake-simulated-line"
+                }
+            ];
+
+            chart_drawing.drawRelativeGrowthChart(
+                comparisonChartData,
+                "srs-eth-stake-relative-chart-full",
+                "SRS vs. Ethereum Stake (Since July 2023)"
+            );
+
             // Read halving timestamps from halvings.txt
             const halvingTimestamps = await fetch('datasets/halvings.txt')
                 .then(response => response.text())
@@ -763,9 +872,7 @@
                 btcData: btcDataH
             });
 
-
         }
-
         // Run main when page loads
         main().catch(console.error);
     </script>
