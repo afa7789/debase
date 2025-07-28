@@ -164,18 +164,18 @@ analyze_period(
     period_name="3-Month Period (Jan-Mar 2025)"
 )
 
-# 1-Year Analysis (June 2024 - May 2025)
+# 1-Year Analysis (June 2024 - Jun 2025)
 analyze_period(
     start_date_str='2024-06-01',
     total_days=365,
     monthly_days_list=[30, 31, 31, 30, 31, 30, 31, 31, 28, 31, 30, 31], # Jun 24 to May 25
-    period_name="1-Year Period (Jun 2024 - May 2025)"
+    period_name="1-Year Period (Jun 2024 - Jun 2025)"
 )
 
-# 2-Year Analysis (June 2023 - May 2025)
+# 2-Year Analysis (June 2023 - Jun 2025)
 analyze_period(
     start_date_str='2023-06-01',
     total_days=730,
     monthly_days_list=[30, 31, 31, 30, 31, 30, 31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31, 28, 31, 30, 31], # Jun 23 to May 25 (24 months)
-    period_name="2-Year Period (Jun 2023 - May 2025)"
+    period_name="2-Year Period (Jun 2023 - Jun 2025)"
 )
