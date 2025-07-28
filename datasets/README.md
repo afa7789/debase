@@ -105,9 +105,10 @@ pip3 install --force-reinstall --no-cache-dir pandas yfinance --break-system-pac
 import yfinance as yf
 
 # Baixar desde 2001 até hoje
-df = yf.download("GC=F", start="2001-01-01", end="2025-07-10", interval="1d")
+df = yf.download("GC=F", start="2001-01-01", end="2025-07-28", interval="1d")
 df.to_csv("ouro.csv")
 ```
+<!-- Silver Sep 25 (SI=F) -->
 
 ainda não achei como pegar por API
 
