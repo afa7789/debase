@@ -1,3 +1,5 @@
+# para rodar:
+#  python3 scripts/analytic.py
 import pandas as pd
 
 def analyze_crypto_aths(btc_data_path, eth_data_path, xmr_data_path):
@@ -85,9 +87,9 @@ def analyze_crypto_aths(btc_data_path, eth_data_path, xmr_data_path):
     return df_result, ath_counts, pre_ath_values
 
 if __name__ == '__main__':
-    BTC_DATA_FILE = '/Users/afa/Developer/study/debase/datasets/bitcoin_2010-07-17_2025-07-25.csv'
-    ETH_DATA_FILE = '/Users/afa/Developer/study/debase/datasets/ethereum_2015-08-07_2025-07-25.csv'
-    XMR_DATA_FILE = '/Users/afa/Developer/study/debase/datasets/monero_2014-05-21_2025-07-25.csv'
+    BTC_DATA_FILE = 'datasets/bitcoin_2010-07-17_2025-07-25.csv'
+    ETH_DATA_FILE = 'datasets/ethereum_2015-08-07_2025-07-25.csv'
+    XMR_DATA_FILE = 'datasets/monero_2014-05-21_2025-07-25.csv'
 
     result_df, ath_counts, pre_ath_values = analyze_crypto_aths(BTC_DATA_FILE, ETH_DATA_FILE, XMR_DATA_FILE)
 
