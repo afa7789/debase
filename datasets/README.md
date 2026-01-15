@@ -113,5 +113,5 @@ df.to_csv("ouro.csv")
 ainda não achei como pegar por API
 
 ### bitcoin
-get like I do in statsukashi from `https://coincodex.com/crypto/bitcoin/historical-data/`
+get like I do in satsukashi from `https://coincodex.com/crypto/bitcoin/historical-data/`
 
