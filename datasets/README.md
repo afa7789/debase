@@ -89,6 +89,40 @@ We will use a python script to generate a CPI_daily.csv
 python3 generator_cpi_daily.py
 ```
 
+### Update CPI automatically (recommended)
+
+This repo includes a script that updates monthly CPI (`datasets/CPI_U.csv`) from the BLS API
+(series `CUUR0000SA0`) and then regenerates the daily CPI series (`datasets/daily_cpi_inflation.csv`).
+
+From repo root:
+
+```bash
+python3 -m pip install --no-cache-dir pandas requests
+python3 scripts/update_cpi.py
+```
+
+Useful options:
+
+```bash
+python3 scripts/update_cpi.py --dry-run
+python3 scripts/update_cpi.py --end-year 2026
+```
+
+##### Run with Docker (no local Python deps)
+
+From repo root:
+
+```bash
+docker build -t debase-cpi -f scripts/Dockerfile.cpi scripts
+docker run --rm -v "$PWD":/work debase-cpi
+```
+
+Dry-run (no files written):
+
+```bash
+docker run --rm -v "$PWD":/work debase-cpi --dry-run
+```
+
 ## Gold
 Onça troy	31,10 g
 
