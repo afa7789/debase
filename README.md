@@ -7,6 +7,10 @@ A simple web app to visualize the long-term performance of Bitcoin, Ethereum, Mo
 - Shows inflation-adjusted prices and the decline of the dollar's purchasing power
 - Lets you compare assets in USD, gold, and relative terms
 
+## Data / datasets
+
+The app reads CSV files from `datasets/`. For details on how the data is sourced and how to update it, see `datasets/README.md`. If you have Docker installed, there are simple commands to update datasets in the readme.
+
 ## scripts/
 
 - **chart_draw.js**: All D3.js chart drawing functions (line charts, legends, axes, etc.)
@@ -14,9 +18,9 @@ A simple web app to visualize the long-term performance of Bitcoin, Ethereum, Mo
 - **import_from_kraken.js**: Imports and parses crypto price data from Kraken CSVs
 - **import_from_cpi.js**: Imports and parses CPI/inflation data from CSV
 - **example.js**: Example script for testing or demo purposes
-- **iterator_example.js**: Example of iterating over datasets
 - **dataset_manager.md / data_set_manager.md / package.md**: Documentation and notes for developers
-- **package.json**: NPM dependencies for scripts (if any)
+
+Some extra standalone scripts also live in `scripts/` (analysis / experiments). See `scripts/README.md`.
 
 ---
 
