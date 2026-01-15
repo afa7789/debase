@@ -112,6 +112,38 @@ df.to_csv("ouro.csv")
 
 ainda não achei como pegar por API
 
+### Update gold + silver automatically (recommended)
+
+This repo includes a script that updates:
+- `datasets/gold.csv` from Yahoo Finance ticker `GC=F`
+- `datasets/silver.csv` from Yahoo Finance ticker `SI=F`
+
+It reads the **last date you already have** (column `Price`) and appends missing daily rows up to **today (UTC)**.
+
+From repo root:
+
+```bash
+python3 -m pip install --no-cache-dir pandas yfinance
+python3 scripts/update_metals.py
+```
+
+Useful options:
+
+```bash
+python3 scripts/update_metals.py --dry-run
+python3 scripts/update_metals.py --end 2026-01-15
+```
+
+##### Run with Docker (no local Python deps)
+
+From repo root:
+
+```bash
+docker build -t debase-metals -f scripts/Dockerfile.metals scripts
+docker run --rm -v "$PWD":/work debase-metals
+```
+
+> Note: Yahoo Finance doesn’t always publish a row for “today” (depends on market session / timing). The script will append whatever daily rows Yahoo returns.
+
 ### bitcoin
 get like I do in satsukashi from `https://coincodex.com/crypto/bitcoin/historical-data/`
-

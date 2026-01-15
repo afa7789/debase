@@ -1,0 +1,10 @@
+FROM python:3.12-slim
+
+RUN pip install --no-cache-dir "pandas>=2.2.0" "yfinance>=0.2.40"
+
+WORKDIR /work
+
+# Run the script from the bind-mounted repo.
+# Supports mounting either the repo root into /work OR its parent (so repo is /work/debase).
+ENTRYPOINT ["sh", "-lc", "if [ -f /work/scripts/update_metals.py ]; then exec python /work/scripts/update_metals.py \"$@\"; fi; if [ -f /work/debase/scripts/update_metals.py ]; then exec python /work/debase/scripts/update_metals.py \"$@\"; fi; p=$(ls -1d /work/*/scripts/update_metals.py 2>/dev/null | head -n 1); if [ -n \"$p\" ]; then exec python \"$p\" \"$@\"; fi; echo \"Could not find scripts/update_metals.py under /work\" >&2; exit 2", "--"]
+
