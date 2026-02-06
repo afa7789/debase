@@ -23,6 +23,10 @@ function halvingDraw({
 	// Convert Unix timestamps to Date objects for halving events
 	const halvings = halvingTimestamps.map(ts => new Date(ts * 1000));
 	
+	// Include nextHalving for drawing shaded areas
+	const allHalvings = [...halvings];
+	if (nextHalving) allHalvings.push(nextHalving);
+	
 	// Determine the domain for the X-axis (time scale)
 	// Starts 600 days before the first halving and ends 600 days after the next halving
 	const minDate = new Date(halvings[0].getTime() - 600 * 24 * 3600 * 1000);
@@ -43,7 +47,7 @@ function halvingDraw({
 		.attr('height', height);
 	
 	// Draw shaded background areas for periods around each halving
-	halvings.forEach((halving, i) => {
+	allHalvings.forEach((halving, i) => {
 		// Define the start and end dates for the shaded regions
 		const beforeStart = new Date(halving.getTime() - 500 * 24 * 3600 * 1000);
 		const afterEnd = new Date(halving.getTime() + 500 * 24 * 3600 * 1000);
