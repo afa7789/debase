@@ -139,13 +139,8 @@ def _merge_append(
             if col not in existing.columns:
                 existing[col] = pd.NA
 
-        new_dates = set(zip(new_rows["Start"], new_rows["End"]))
-        existing = existing[
-            ~(
-                existing["Start"].isin([s for s, _ in new_dates])
-                & existing["End"].isin([e for _, e in new_dates])
-            )
-        ]
+        new_starts = set(new_rows["Start"])
+        existing = existing[~existing["Start"].isin(new_starts)]
 
         merged = pd.concat(
             [new_rows[CSV_COLUMNS], existing[CSV_COLUMNS]], ignore_index=True
