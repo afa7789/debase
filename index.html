@@ -859,7 +859,10 @@
             const halvings = halvingTimestamps.map(ts => new Date(ts * 1000));
             const lastHalving = halvings[halvings.length - 1];
             const nextHalving = new Date(lastHalving.getTime() + 4 * 365.25 * 24 * 3600 * 1000);
-            document.getElementById('next-halving').textContent = `Estimated next halving: ${nextHalving.toLocaleDateString()}`;
+            const windowStart = new Date(nextHalving.getTime() - 500 * 24 * 3600 * 1000);
+            document.getElementById('next-halving').innerHTML =
+                `Estimated next halving: ${nextHalving.toLocaleDateString()}<br>` +
+                `500-day window start: ${windowStart.toLocaleDateString()}`;
 
             const btcDataH = {
                 timestamp: [],
