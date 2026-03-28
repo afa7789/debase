@@ -8,6 +8,7 @@ This folder contains both the scripts used by the web app and a few standalone s
   - Docker: `scripts/Dockerfile.metals`
 - `update_cpi.py`: updates `datasets/CPI_U.csv` from BLS and regenerates `datasets/daily_cpi_inflation.csv`
   - Docker: `scripts/Dockerfile.cpi`
+- `update_crypto.py`: updates bitcoin/ethereum/monero CSVs from Kraken API
 - `analytic.py`: small analysis script that prints BTC/ETH/XMR ATH events from the datasets
   - output example: `analytic_ATH_result.txt`
 - `SRS_stake.py`: small staking/yield comparison experiment using ETH historical prices

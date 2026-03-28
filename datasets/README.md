@@ -179,5 +179,25 @@ docker run --rm -v "$PWD":/work debase-metals
 
 > Note: Yahoo Finance doesn’t always publish a row for “today” (depends on market session / timing). The script will append whatever daily rows Yahoo returns.
 
-### bitcoin
-get like I do in satsukashi from `https://coincodex.com/crypto/bitcoin/historical-data/`
+### Bitcoin / Ethereum / Monero
+
+Data is fetched automatically from **Kraken public API**:
+- BTC: `XBTUSD`
+- ETH: `ETHUSD`
+- XMR: `XMRUSD`
+
+From repo root:
+
+```bash
+python3 -m pip install --no-cache-dir pandas requests
+python3 scripts/update_crypto.py
+```
+
+Useful options:
+
+```bash
+python3 scripts/update_crypto.py --dry-run
+python3 scripts/update_crypto.py --end 2026-01-15
+```
+
+> Note: Kraken returns OHLC data. The script converts to the CSV format with Start/End dates.
